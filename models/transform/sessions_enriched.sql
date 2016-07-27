@@ -1,4 +1,4 @@
-with events as (
+with sessions as (
 
   select * from {{ref('sessions')}}
 
@@ -17,7 +17,7 @@ with events as (
 )
 
 select
-  *,
+  sessions.*,
   emails.email,
   userids.user_id,
   case
