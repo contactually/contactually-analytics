@@ -4,7 +4,7 @@
 
 with events as (
 
-  select * from {{ref('events')}}
+  select * from {{ref('product_events')}}
 
 ), d1 as (
 
@@ -14,7 +14,6 @@ with events as (
       (partition by domain_userid order by collector_tstamp rows between unbounded preceding and unbounded following)
       as user_id
   from events
-  where se_category = 'identify'
 
 )
 
