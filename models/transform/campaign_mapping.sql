@@ -13,7 +13,6 @@ with attribution as (
 	count(*)
 	from attribution
 	group by 1, 2, 3,4
-	order by 5 desc
 ), formatted_chan_mapping as (
 	select
 	case when campaign = '(none)' then null else campaign end as campaign,
