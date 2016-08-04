@@ -11,8 +11,17 @@ analysis-paths: ["analysis"]
 data-paths: ["data"]
 
 model-defaults:
-  materialized: false
+  materialized: view
   enabled: true
+
+models:
+  Contactually:
+    transform:
+      campaign_mapping:
+        materialized: table
+      campaign_referers:
+        materialized: table
+
 
 profile: "contactually"
 
