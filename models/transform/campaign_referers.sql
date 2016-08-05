@@ -13,7 +13,8 @@ formatted_referers as (
 		when refr_medium = 'email' then 'Email'
 		else refr_medium
 	end as channel,
-	refr_urlhost
+	refr_urlhost,
+    replace(refr_urlhost, 'www.', '') as refr_urlhost_clean
 	from snowplow_referers
 )
-select channel, refr_urlhost from formatted_referers
+select channel, refr_urlhost, refr_urlhost_clean from formatted_referers

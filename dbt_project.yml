@@ -21,6 +21,10 @@ models:
         materialized: table
       campaign_referers:
         materialized: table
+      sessions_enriched:
+        materialized: table
+      campaign_channels:
+        materialized: table
 
 
 profile: "contactually"
