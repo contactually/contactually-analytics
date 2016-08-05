@@ -1,7 +1,7 @@
 
 with snowplow_referers as (
 	select refr_medium, refr_urlhost
-	from {{ ref('events') }}
+	from {{ ref('sessions') }}
 	where refr_medium is not null and refr_urlhost is not null
 	group by 1,2
 ),

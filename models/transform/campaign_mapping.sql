@@ -28,6 +28,9 @@ with attribution as (
     select * from formatted_chan_mapping
     where source not in (select source from non_attributable_sources)
     and channel != '* EXCLUDE'
+), final as (
+    select campaign, medium, source, channel from filtered_mapped_channels
+    union all select '(none)', 'cpc', 'adwords', 'Advertising'
 )
 
-select * from filtered_mapped_channels
+select * from final
