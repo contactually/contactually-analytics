@@ -28,7 +28,9 @@ select
     when logins.domain_userid is not null then true
     else false
   end as user_logged_in,
-  channels.channel
+  channels.channel,
+  channels.enriched_medium,
+  channels.enriched_source
 from sessions
   left join email_identifies as emails
     on  sessions.domain_userid = emails.domain_userid
