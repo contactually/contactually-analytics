@@ -23,8 +23,12 @@ models:
         materialized: table
       sessions_enriched:
         materialized: table
+        sort: [session_id, session_start_tstamp]
+        dist: session_id
       campaign_channels:
         materialized: table
+        sort: session_id
+        dist: session_id
 
 
 profile: "contactually"

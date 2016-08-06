@@ -21,6 +21,7 @@ with sessions as (
 )
 
 select
+  sessions.domain_userid || '-' || sessions.domain_sessionidx as session_id,
   sessions.*,
   emails.email,
   userids.user_id,
@@ -41,3 +42,4 @@ from sessions
     and sessions.domain_sessionidx = logins.domain_sessionidx
   left join session_channels as channels
     on  (sessions.domain_userid || '-' || sessions.domain_sessionidx) = channels.session_id
+where (emails.email not ilike '%contactually.com' or emails.email is null)
