@@ -22,7 +22,8 @@ models:
       campaign_referers:
         materialized: table
       sessions_enriched:
-        materialized: table
+        materialized: incremental
+        sql_where: "dvce_min_tstamp > (select max(dvce_min_tstamp) from {{this}})"
         sort: [session_id, session_start_tstamp]
         dist: session_id
       campaign_channels:
