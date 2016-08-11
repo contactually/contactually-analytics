@@ -22,6 +22,7 @@ with sessions as (
 
 select
   sessions.domain_userid || '-' || sessions.domain_sessionidx as session_id,
+  coalesce(userids.user_id, emails.email, sessions.domain_userid) as blended_user_id,
   sessions.*,
   emails.email,
   userids.user_id,
