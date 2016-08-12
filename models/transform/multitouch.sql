@@ -1,6 +1,5 @@
 -- TODO : only use sessions that occur BEFORE the signup happens
--- TODO : limit this shit to sessions + users > 2016-07-04
--- TODO : fucking fix the referer information u schmuk
+-- TODO : limit this to sessions + users > 2016-07-04
 
 with session_ranks as (
   select
