@@ -4,32 +4,54 @@ with sessions as (
 normalized_sessions as (
     select
     sessions.*,
-    replace(lower(trim(mkt_source)), '+', ' ') as norm_mkt_source,
-    replace(lower(trim(mkt_medium)), '+', ' ') as norm_mkt_medium,
-    replace(lower(trim(mkt_campaign)), '+', ' ') as norm_mkt_campaign,
-    replace(refr_urlhost, 'www.', '') as refr_urlhost_clean
+    lower(coalesce(mkt_medium, refr_medium)) as medium,
+    lower(coalesce(mkt_source, refr_source)) as source,
+    lower(mkt_campaign) as campaign,
+    lower(replace(refr_urlhost, 'www.', '')) as refr_urlhost_clean
     from sessions
-), session_channels as (
+), normal_channel_mapping as (
+    select
+        lower(in_medium)   as in_medium,
+        lower(in_source)   as in_source,
+        lower(in_campaign) as in_campaign,
+        lower(in_referer)  as in_referer,
+        out_channel,
+        out_source,
+        out_campaign
+    from dbt_dbanin.channel_mapping
+),
+session_channels as (
     select
         s.session_id,
-        coalesce(c1.channel, c2.channel, c3.channel, c4.channel, '(none)') as channel,
-        coalesce(s.norm_mkt_source, c1.source, c2.source, c3.source, c4.source, '(none)') as enriched_source,
-        coalesce(s.norm_mkt_medium, c1.medium, c2.medium, c3.medium, c4.medium, '(none)') as enriched_medium,
-        s.refr_urlhost_clean
+        case when
+            coalesce(refr_urlhost, mkt_medium, mkt_source, mkt_campaign, refr_medium, refr_source) is null then 'Direct'
+        else
+            initcap(coalesce(c1.out_channel, c2.out_channel, c3.out_channel, c4.out_channel, c5.out_channel, s.medium, 'Referral'))
+        end as channel,
+        coalesce(c1.out_source, c2.out_source, c3.out_source, c4.out_source, c5.out_source, s.source, s.refr_urlhost_clean) as source,
+        coalesce(c1.out_campaign, c2.out_campaign, c3.out_campaign, c4.out_campaign, c5.out_source, s.campaign) as campaign,
+        s.refr_urlhost_clean as referer
     from normalized_sessions as s
-        left outer join dbt_dbanin.channel_mapping c1 on (s.norm_mkt_source = c1.source and s.norm_mkt_medium = c1.medium and s.refr_urlhost_clean = c1.source)
-        left outer join dbt_dbanin.channel_mapping c2 on (s.norm_mkt_source = c2.source and s.norm_mkt_medium = c2.medium)
-        left outer join dbt_dbanin.channel_mapping c3 on (s.refr_urlhost_clean = c3.source)
-        left outer join dbt_dbanin.channel_mapping c4 on (s.refr_urlhost_clean = c4.referer)
-    where not (s.norm_mkt_source is null and s.norm_mkt_medium is null and s.norm_mkt_campaign is null and s.refr_urlhost_clean is null)
+        left outer join normal_channel_mapping as c1
+            on s.medium = c1.in_medium and s.source = c1.in_source and s.campaign = c1.in_campaign
+        left outer join normal_channel_mapping as c2
+            on s.medium = c2.in_medium and s.source = c2.in_source and c2.in_campaign is null
+        left outer join normal_channel_mapping as c3
+            on s.source = c3.in_source and s.campaign = c3.in_campaign and c3.in_medium is null
+        left outer join normal_channel_mapping as c4
+            on s.medium = c4.in_medium and c4.in_source is null and c4.in_campaign is null
+        left outer join normal_channel_mapping as c5
+            on s.refr_urlhost_clean ilike c5.in_referer
     group by 1, 2, 3, 4, 5
-), unique_session_channels as (
-    select * from (
-        select *, row_number() over (partition by session_id order by channel, enriched_medium, enriched_source) as row_num
-        from session_channels
-    )
-    where row_num = 1
+),
+unique_session_channels as (
+  select session_id, channel, source, campaign, referer from (
+    select session_id, channel, source, campaign, referer,
+    rank() over (partition by session_id order by channel, source, campaign, referer) as rank
+    from session_channels
+  )
+  where rank = 1
 )
-select sessions.*, initcap(channel) channel, lower(enriched_source) enriched_source, lower(enriched_medium) enriched_medium
-from sessions
-left outer join unique_session_channels on sessions.session_id = unique_session_channels.session_id
+select s.*, usc.channel, usc.source, usc.campaign
+from sessions s
+left outer join unique_session_channels usc on s.session_id = usc.session_id

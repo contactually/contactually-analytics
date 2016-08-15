@@ -17,27 +17,24 @@ model-defaults:
 models:
   Contactually:
     transform:
-      campaign_mapping:
+      normal_channel_mapping:
         materialized: table
-      campaign_referers:
+      events:
         materialized: table
-      sessions_joined:
-        materialized: view
+        sort: [domain_userid, domain_sessionidx]
+        dist: domain_userid
+      sessions:
+        materialized: table
+      sessions_joined: # temp, disable this!
+        materialized: table
       sessions_enriched:
         materialized: table
         sort: [session_id, session_start_tstamp]
         dist: session_id
-      campaign_channels:
-        materialized: table
-        sort: session_id
-        dist: session_id
-      enriched_events:
-        materialized: table
-        dist: domain_userid
-        sort: [domain_userid, domain_sessionidx, dvce_tstamp]
       multitouch:
         materialized: table
-
+      multitouch_timeseries:
+        materialized: table
 
 profile: "contactually"
 
