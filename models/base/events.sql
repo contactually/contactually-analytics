@@ -1,4 +1,3 @@
-
 with events as (
   select *,
     rank() over(partition by domain_userid, domain_sessionidx order by dvce_tstamp) as rank,
@@ -11,7 +10,8 @@ ranked as (
    lag(page_url) over(partition by domain_userid order by domain_sessionidx, rank) as prev_page,
    lag(domain_sessionidx) over(partition by domain_userid order by domain_sessionidx, rank) as prev_idx,
    lag(domain_sessionid) over(partition by domain_userid order by domain_sessionidx, rank) as prev_id,
-   lag(is_last) over (partition by domain_userid order by domain_sessionidx, rank) as prev_was_last
+   lag(is_last) over (partition by domain_userid order by domain_sessionidx, rank) as prev_was_last,
+   lag(dvce_tstamp) over (partition by domain_userid order by domain_sessionidx, rank) as prev_tstamp
    from (
      select *,
      case when rank = 1 then true else false end as is_first,
@@ -20,21 +20,13 @@ ranked as (
    )
    where is_first = true or is_last = true
 ),
-with_pseudo_session_id as (
-  select *,
-  case when prev_page = page_url and prev_idx + 1 = domain_sessionidx and is_first and prev_was_last and event = 'pp' then
-     prev_idx
-  else
-     domain_sessionidx
-  end as pseudo_sessionidx,
-  case when prev_page = page_url and prev_idx + 1 = domain_sessionidx and is_first and prev_was_last and event = 'pp' then
-     prev_id
-  else
-     domain_sessionid
-  end as pseudo_sessionid
+pseudo_sessionid_mapping as (
+  select domain_userid, domain_sessionidx as from_idx, domain_sessionid as from_id, prev_idx as to_idx, prev_id as to_id
   from ranked
+  where prev_page = page_url and prev_idx + 1 = domain_sessionidx and is_first and prev_was_last and event = 'pp'
+    and datediff('minute', prev_tstamp, dvce_tstamp) < 360 -- must be < 6 hours between sessions
+  group by 1, 2, 3, 4, 5
 )
-
 select
     app_id,
     br_colordepth,
@@ -59,11 +51,14 @@ select
     doc_charset,
     doc_height,
     doc_width,
-    domain_sessionid as original_sessionid,
-    domain_sessionidx as original_sessionidx,
-    pseudo_sessionid as domain_sessionid,
-    pseudo_sessionidx as domain_sessionidx,
-    domain_userid,
+    -- pseudo session id and idx
+    coalesce(map.to_id, e.domain_sessionid) as domain_sessionid,
+    -- fix gaps in session ids
+    dense_rank() over (partition by e.domain_userid order by coalesce(map.to_idx, e.domain_sessionidx)) as domain_sessionidx,
+    -- original session id and idx
+    e.domain_sessionid as original_domain_sessionid,
+    e.domain_sessionidx as original_domain_sessionidx,
+    e.domain_userid,
     dvce_ismobile,
     dvce_screenheight,
     dvce_sent_tstamp,
@@ -138,4 +133,6 @@ select
     useragent,
     v_collector,
     v_tracker
-from with_pseudo_session_id
+from events e
+left outer join pseudo_sessionid_mapping map on map.domain_userid = e.domain_userid
+  and map.from_id = e.domain_sessionid and map.from_idx = e.domain_sessionidx

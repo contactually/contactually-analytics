@@ -16,13 +16,14 @@ model-defaults:
 
 models:
   Contactually:
-    transform:
-      normal_channel_mapping:
-        materialized: table
+    base:
       events:
         materialized: table
         sort: [domain_userid, domain_sessionidx]
         dist: domain_userid
+    transform:
+      normal_channel_mapping:
+        materialized: table
       sessions:
         materialized: table
       sessions_joined: # temp, disable this!
@@ -32,7 +33,7 @@ models:
         sort: [session_id, session_start_tstamp]
         dist: session_id
       multitouch:
-        materialized: table
+        enabled: false
       multitouch_timeseries:
         materialized: table
 

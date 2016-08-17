@@ -19,16 +19,15 @@ with session_ranks as (
 ),
 points_attributed as (
   select *,
+  session_number || ' of ' || total as attribution_type,
   case when total = 1 then 1.0
        when total = 2 then 0.5
        when session_number = 1 then 0.4
-       when session_number = total then 0.40
+       when session_number = total then 0.4
        else 0.2 / (total - 2)
-  end as points
+  end as attribution_points
   from session_ranks
 )
 
-select session_start_tstamp as timestamp, channel, source, campaign, sum(points) as score
+select session_start_tstamp as timestamp, user_id, channel, source, campaign, attribution_type, attribution_points
 from points_attributed
-where session_start_tstamp > '2016-07-04'
-group by 1, 2, 3, 4

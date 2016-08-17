@@ -4,7 +4,11 @@ with sessions as (
 normalized_sessions as (
     select
     sessions.*,
-    lower(coalesce(mkt_medium, refr_medium)) as medium,
+    case when refr_medium = 'unknown' then
+        lower(mkt_medium)
+    else
+        lower(coalesce(mkt_medium, refr_medium))
+    end as medium,
     lower(coalesce(mkt_source, refr_source)) as source,
     lower(mkt_campaign) as campaign,
     lower(replace(refr_urlhost, 'www.', '')) as refr_urlhost_clean
