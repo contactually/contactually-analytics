@@ -26,8 +26,8 @@ models:
         materialized: table
       sessions:
         materialized: table
-      sessions_joined: # temp, disable this!
-        materialized: table
+      sessions_joined:
+        materialized: view
       sessions_enriched:
         materialized: table
         sort: [session_id, session_start_tstamp]
