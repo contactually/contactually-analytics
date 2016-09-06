@@ -10,6 +10,9 @@ with session_ranks as (
   coalesce(channel, 'Direct') as channel,
   source,
   mkt_campaign as campaign,
+  mkt_medium as medium,
+  mkt_term as term,
+  mkt_content as "content",
   count(*) over (partition by blended_user_id) as total,
   min(session_start_tstamp) over (partition by blended_user_id) as first_event_date
   from {{ref('sessions_enriched')}} s
@@ -29,5 +32,5 @@ points_attributed as (
   from session_ranks
 )
 
-select session_start_tstamp as timestamp, user_id, channel, source, campaign, attribution_type, attribution_points
+select session_start_tstamp as timestamp, session_id, user_id, channel, source, medium, campaign, term, "content", attribution_type, attribution_points
 from points_attributed

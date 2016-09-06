@@ -50,7 +50,7 @@ session_channels as (
 ),
 unique_session_channels as (
   select session_id, channel, source, campaign, referer from (
-    select session_id, channel, source, campaign, referer,
+    select *,
     rank() over (partition by session_id order by channel, source, campaign, referer) as rank
     from session_channels
   )

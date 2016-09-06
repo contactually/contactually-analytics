@@ -36,6 +36,10 @@ models:
         enabled: false
       multitouch_timeseries:
         materialized: table
+    ads:
+      base:
+        ad_performance_all:
+          materialized: table
 
 profile: "contactually"
 
