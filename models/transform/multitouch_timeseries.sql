@@ -32,5 +32,5 @@ points_attributed as (
   from session_ranks
 )
 
-select session_start_tstamp as timestamp, user_id, channel, source, medium, campaign, term, "content", attribution_type, attribution_points
+select session_start_tstamp as timestamp, session_id, user_id, channel, source, medium, campaign, term, "content", attribution_type, attribution_points
 from points_attributed
