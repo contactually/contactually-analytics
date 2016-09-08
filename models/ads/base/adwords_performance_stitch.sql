@@ -16,12 +16,10 @@ with rawdata as (
 )
 
 select
-  service || '-' || date::text || '-' || campaign_id::text || '-' || ad_group_id || '-' || adcontent || '-' ||  url || '-' || keyword as id,
+  service || '-' || date::text || '-' || campaign_id::text || '-' || ad_group_id || '-' || adcontent || '-' ||  url || '-' || keyword as composite_key,
   service,
   date,
   campaign_id,
-  ad_group_id,
-  click_type,
   url,
   split_part(url,'?',1) as base_url,
   nullif(split_part(split_part(url,'utm_source=',2), '&', 1), '') as utm_source,

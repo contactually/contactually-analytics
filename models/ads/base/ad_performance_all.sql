@@ -1,10 +1,17 @@
 with adwords as (
 
-    select id, service, date, campaign_id, ad_group_id, click_type, base_url, utm_source,
+    select md5(composite_key) as "id", service, date, campaign_id, base_url, utm_source,
            utm_medium, utm_campaign, utm_content, utm_term, impressions, clicks, cost
     from {{ ref('adwords_performance_stitch') }}
+),
+
+fb_ads as (
+
+    select md5(composite_key), service, insight_date, campaign_id, base_url, utm_source,
+           utm_medium, utm_campaign, utm_content, utm_term, impressions, clicks, cost
+    from {{ ref('facebook_performance_stitch') }}
 )
 
 select * from adwords
--- union all ...
-
+union all
+select * from fb_ads
