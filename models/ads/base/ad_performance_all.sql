@@ -34,8 +34,8 @@ ad_id_channel_mapping as (
     select
         id,
         coalesce(c1.out_channel, c2.out_channel, c3.out_channel, c4.out_channel, 'Advertising') as channel,
-        coalesce(c1.out_source, c2.out_source, c3.out_source, c4.out_source) as source,
-        coalesce(c1.out_campaign, c2.out_campaign, c3.out_campaign, c4.out_campaign) as campaign
+        coalesce(c1.out_source, c2.out_source, c3.out_source, c4.out_source, unioned.utm_source) as source,
+        coalesce(c1.out_campaign, c2.out_campaign, c3.out_campaign, c4.out_campaign, unioned.utm_campaign) as campaign
 
     from unioned
 
@@ -64,13 +64,21 @@ unique_ad_id_channels as (
 
 with_channel as (
     select
-        unioned.id, service, "date", campaign_id, base_url, clicks, cost, impressions, 
+        unioned.id, service, "date", campaign_id, clicks, cost, impressions, 
         mapped.channel,
-        utm_medium,
-        mapped.source as utm_source,
-        mapped.campaign as utm_campaign,
-        utm_content,
-        utm_term
+        replace(replace(lower(base_url), 'http://', ''), 'https://', '') as base_url,
+        replace(replace(replace(lower(utm_medium), '%20', ' '), '+', ' '), '%7c', '|') as utm_medium,
+        case when mapped.source ilike 'facebook' then 'facebook-ads' else
+            replace(replace(replace(lower(mapped.source), '%20', ' '), '+', ' '), '%7c', '|') end as utm_source,
+        replace(replace(replace(lower(mapped.campaign), '%20', ' '), '+', ' '), '%7c', '|') as utm_campaign,
+        replace(replace(replace(lower(utm_content), '%20', ' '), '+', ' '), '%7c', '|') as utm_content,
+        replace(replace(replace(lower(utm_term), '%20', ' '), '+', ' '), '%7c', '|') as utm_term,
+
+        replace(replace(replace(lower(utm_medium), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_medium,
+        replace(replace(replace(lower(utm_source), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_source,
+        replace(replace(replace(lower(utm_campaign), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_campaign,
+        replace(replace(replace(lower(utm_term), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_term,
+        replace(replace(replace(lower(utm_content), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_content
     from unioned
         left outer join unique_ad_id_channels as mapped on mapped.id = unioned.id
 )

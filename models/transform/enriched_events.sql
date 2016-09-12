@@ -11,11 +11,18 @@ with events as (
     and e.collector_tstamp < '2030-01-01' -- remove incorrect collector_tstamps, can cause sql errors
     and e.dvce_tstamp > '2000-01-01' -- remove incorrect dvce_created_tstamps, can cause sql errors
     and e.dvce_tstamp < '2030-01-01' -- remove incorrect dvce_created_tstamps, can cause sql errors
+), joined as (
+    select
+      coalesce(user_mapping.user_id, email_mapping.email, e.domain_userid) as blended_user_id,
+      user_mapping.user_id as inferred_user_id,
+      e.*
+    from events e
+    left join {{ref('product_identifies')}} user_mapping on user_mapping.domain_userid = e.domain_userid
+    left join {{ref('email_identifies')}} email_mapping on email_mapping.domain_userid = e.domain_userid
 )
+
 select
-  coalesce(user_mapping.user_id, email_mapping.email, e.domain_userid) as blended_user_id,
-  user_mapping.user_id as inferred_user_id,
-  e.*
-from events e
-left join {{ref('product_identifies')}} user_mapping on user_mapping.domain_userid = e.domain_userid
-left join {{ref('email_identifies')}} email_mapping on email_mapping.domain_userid = e.domain_userid
+domain_userid || '-' || domain_sessionidx as session_id,
+md5(blended_user_id) as visitor_id,
+*
+from joined

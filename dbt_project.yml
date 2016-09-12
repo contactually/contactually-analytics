@@ -28,6 +28,8 @@ models:
         materialized: table
       sessions_joined:
         materialized: view
+      enriched_events:
+        materialized: table
       sessions_enriched:
         materialized: table
         sort: [session_id, session_start_tstamp]

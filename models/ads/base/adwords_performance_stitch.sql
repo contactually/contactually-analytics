@@ -10,13 +10,13 @@ with rawdata as (
     keyword,
     adcontent,
     adwordscampaignid as campaign_id,
-    adgroup as ad_group_id,  -- TODO : this is a string, not an id
-    null click_type -- TODO : not provided?
+    adcontent || '-' || addestinationurl || '-' || adgroup || '-' || adwordscampaignid || '-' || campaign || '-' || date || '-' || keyword as composite_key
   from _1_all_contactually_property_traffic.adwords89732821_v2
 )
 
 select
-  service || '-' || date::text || '-' || campaign_id::text || '-' || ad_group_id || '-' || adcontent || '-' ||  url || '-' || keyword as composite_key,
+  --service || '-' || date::text || '-' || campaign_id::text || '-' || ad_group_id || '-' || adcontent || '-' ||  url || '-' || keyword as composite_key,
+  composite_key,
   service,
   date,
   campaign_id,

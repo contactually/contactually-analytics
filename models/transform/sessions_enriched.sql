@@ -28,9 +28,9 @@ session_channels as (
     select
         s.session_id,
         case when
-            coalesce(refr_urlhost, mkt_medium, mkt_source, mkt_campaign, refr_medium, refr_source) is null then 'Direct'
+            coalesce(refr_urlhost, mkt_medium, mkt_source, mkt_campaign, refr_medium, refr_source) is null then 'direct'
         else
-            initcap(coalesce(c1.out_channel, c2.out_channel, c3.out_channel, c4.out_channel, c5.out_channel, s.medium, 'Referral'))
+            lower(coalesce(c1.out_channel, c2.out_channel, c3.out_channel, c4.out_channel, c5.out_channel, 'referral'))
         end as channel,
         coalesce(c1.out_source, c2.out_source, c3.out_source, c4.out_source, c5.out_source, s.source, s.refr_urlhost_clean) as source,
         coalesce(c1.out_campaign, c2.out_campaign, c3.out_campaign, c4.out_campaign, c5.out_source, s.campaign) as campaign,
@@ -56,6 +56,9 @@ unique_session_channels as (
   )
   where rank = 1
 )
-select s.*, usc.channel, usc.source, usc.campaign
+select s.*, usc.channel, usc.source, usc.campaign,
+mkt_source as original_mkt_source, mkt_medium as original_mkt_medium,
+mkt_campaign as original_mkt_campaign, mkt_term as original_mkt_term,
+mkt_content as original_mkt_content
 from sessions s
 left outer join unique_session_channels usc on s.session_id = usc.session_id
