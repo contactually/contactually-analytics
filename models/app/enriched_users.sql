@@ -7,6 +7,7 @@ select
        users.sign_in_count,
        users.last_sign_in_at,
 
+       teams.id as team_id,
        teams.domain as team_domain,
        teams.name as team_name,
        teams.created_at as team_created_at,

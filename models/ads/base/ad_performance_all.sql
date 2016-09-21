@@ -68,8 +68,7 @@ with_channel as (
         mapped.channel,
         replace(replace(lower(base_url), 'http://', ''), 'https://', '') as base_url,
         replace(replace(replace(lower(utm_medium), '%20', ' '), '+', ' '), '%7c', '|') as utm_medium,
-        case when mapped.source ilike 'facebook' then 'facebook-ads' else
-            replace(replace(replace(lower(mapped.source), '%20', ' '), '+', ' '), '%7c', '|') end as utm_source,
+        replace(replace(replace(lower(mapped.source), '%20', ' '), '+', ' '), '%7c', '|') as utm_source,
         replace(replace(replace(lower(mapped.campaign), '%20', ' '), '+', ' '), '%7c', '|') as utm_campaign,
         replace(replace(replace(lower(utm_content), '%20', ' '), '+', ' '), '%7c', '|') as utm_content,
         replace(replace(replace(lower(utm_term), '%20', ' '), '+', ' '), '%7c', '|') as utm_term,
@@ -84,3 +83,4 @@ with_channel as (
 )
 
 select * from with_channel
+where "date" > '2016-07-04'

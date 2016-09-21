@@ -1,0 +1,6 @@
+ad_performance_all:
+    constraints:
+        unique:
+            - id
+        not_null:
+            - id

@@ -16,6 +16,7 @@ model-defaults:
 
 models:
   Contactually:
+    post-hook: "grant select on table {{this.grant_name}} to looker"
     base:
       events:
         materialized: table
@@ -42,8 +43,11 @@ models:
       base:
         ad_performance_all:
           materialized: table
+  Snowplow:
+    post-hook: "grant select on table {{this.grant_name}} to looker"
 
 profile: "contactually"
 
 repositories:
   - "git@github.com:fishtown-analytics/snowplow.git"
+  - "https://github.com/analyst-collective/dbt-audit.git"

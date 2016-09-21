@@ -19,11 +19,14 @@ with session_ranks as (
   count(*) over (partition by blended_user_id) as sessions_count,
   mkt_medium, mkt_source, mkt_campaign, mkt_term, mkt_content,
   min(session_start_tstamp) over (partition by blended_user_id) as first_touch_timestamp,
-  max(session_end_tstamp) over (partition by blended_user_id) as last_touch_timestamp
+  max(session_end_tstamp) over (partition by blended_user_id) as last_touch_timestamp,
+  users.team_id,
+  users.payment_account_id,
+  coalesce(users.user_added_after_team_paid, false) as user_added_after_team_paid
   from {{ref('sessions_enriched')}} s
-  left outer join {{ref('users')}} users on users.id = s.user_id
+  left outer join {{ref('enriched_users')}} users on users.id = s.user_id
   where
-  (s.session_start_tstamp <= users.created_at or s.dvce_min_tstamp <= users.created_at or users.id is null)
+  (s.session_start_tstamp <= users.team_created_at or s.dvce_min_tstamp <= users.team_created_at or users.id is null)
 ),
 points_attributed as (
   select *,
@@ -59,6 +62,10 @@ select session_start_tstamp as timestamp,
        replace(replace(replace(lower(mkt_source), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_source,
        replace(replace(replace(lower(mkt_campaign), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_campaign,
        replace(replace(replace(lower(mkt_term), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_term,
-       replace(replace(replace(lower(mkt_content), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_content
+       replace(replace(replace(lower(mkt_content), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_content,
+
+       team_id,
+       payment_account_id,
+       user_added_after_team_paid
 
 from points_attributed
