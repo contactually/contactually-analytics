@@ -16,7 +16,7 @@ model-defaults:
 
 models:
   Contactually:
-    post-hook: "grant select on table {{this.grant_name}} to looker"
+    post-hook: "grant select on table {{this}} to looker"
     base:
       events:
         materialized: table
@@ -43,8 +43,10 @@ models:
       base:
         ad_performance_all:
           materialized: table
+      transform:
+        materialized: table
   Snowplow:
-    post-hook: "grant select on table {{this.grant_name}} to looker"
+    post-hook: "grant select on table {{this}} to looker"
 
 profile: "contactually"
 

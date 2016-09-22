@@ -39,33 +39,62 @@ case when user_id is null then 0.0 -- don't attribute points if the visitor didn
        else 0.2 / (sessions_count - 2)
   end as attribution_points
   from session_ranks
+
+), transformed as (
+
+    select session_start_tstamp as timestamp,
+           session_number,
+           sessions_count,
+           session_id,
+           visitor_id,
+           landing_page,
+           exit_page,
+           user_id,
+           channel,
+           source,
+           medium,
+           campaign,
+           term,
+           "content",
+           attribution_type,
+           attribution_points,
+
+           replace(replace(replace(lower(nullif(mkt_medium, '')), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_medium,
+           replace(replace(replace(lower(nullif(mkt_source, '')), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_source,
+           replace(replace(replace(lower(nullif(mkt_campaign, '')), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_campaign,
+           replace(replace(replace(lower(nullif(mkt_term, '')), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_term,
+           replace(replace(replace(lower(nullif(mkt_content, '')), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_content,
+
+           team_id,
+           payment_account_id,
+           user_added_after_team_paid
+
+    from points_attributed
+
+), with_ad_id as (
+    select
+        ads_rollup.id as ad_id,
+        transformed.*,
+        row_number() over (partition by session_id) as row_number -- TODO : add order by?
+    from transformed
+    left outer join {{ ref('ads_rollup') }} as ads_rollup ON
+        (transformed.landing_page = ads_rollup.base_url OR ads_rollup.base_url is null) AND
+        --(transformed.timestamp >= ads_rollup.min_date AND transformed.timestamp <= ads_rollup.max_date) AND
+        -- we could check betweenness, but if the utm params match up and it occurred after the ad was placed, then it should count!
+        --(transformed.timestamp >= ads_rollup.min_date) AND
+        (ads_rollup.original_utm_source ilike transformed.original_mkt_source or ads_rollup.original_utm_source is null) AND
+        (ads_rollup.original_utm_medium ilike transformed.original_mkt_medium or ads_rollup.original_utm_medium is null) AND
+        (ads_rollup.original_utm_campaign ilike transformed.original_mkt_campaign or ads_rollup.original_utm_campaign is null) AND
+        (ads_rollup.original_utm_term ilike transformed.original_mkt_term or ads_rollup.original_utm_term is null) AND
+        (ads_rollup.original_utm_content ilike transformed.original_mkt_content or ads_rollup.original_utm_content is null) AND
+        NOT (
+          ads_rollup.original_utm_medium is null AND
+          ads_rollup.original_utm_source is null AND
+          ads_rollup.original_utm_campaign is null AND
+          ads_rollup.original_utm_term is null AND
+          ads_rollup.original_utm_content is null
+        )
 )
 
-select session_start_tstamp as timestamp,
-       session_number,
-       sessions_count,
-       session_id,
-       visitor_id,
-       landing_page,
-       exit_page,
-       user_id,
-       channel,
-       source,
-       medium,
-       campaign,
-       term,
-       "content",
-       attribution_type,
-       attribution_points,
-
-       replace(replace(replace(lower(mkt_medium), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_medium,
-       replace(replace(replace(lower(mkt_source), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_source,
-       replace(replace(replace(lower(mkt_campaign), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_campaign,
-       replace(replace(replace(lower(mkt_term), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_term,
-       replace(replace(replace(lower(mkt_content), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_content,
-
-       team_id,
-       payment_account_id,
-       user_added_after_team_paid
-
-from points_attributed
+select * from with_ad_id
+where row_number = 1

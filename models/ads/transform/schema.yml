@@ -1,0 +1,6 @@
+ads_rollup:
+    constraints:
+        unique:
+            - id
+        not_null:
+            - id

@@ -35,6 +35,6 @@ select
     base_url,
     sum(impressions) as impressions,
     sum(spend) as cost,
-    sum(website_clicks) as clicks
+    sum(clicks) as clicks
   from joined
   group by 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11

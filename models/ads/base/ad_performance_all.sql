@@ -73,11 +73,11 @@ with_channel as (
         replace(replace(replace(lower(utm_content), '%20', ' '), '+', ' '), '%7c', '|') as utm_content,
         replace(replace(replace(lower(utm_term), '%20', ' '), '+', ' '), '%7c', '|') as utm_term,
 
-        replace(replace(replace(lower(utm_medium), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_medium,
-        replace(replace(replace(lower(utm_source), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_source,
-        replace(replace(replace(lower(utm_campaign), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_campaign,
-        replace(replace(replace(lower(utm_term), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_term,
-        replace(replace(replace(lower(utm_content), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_content
+        replace(replace(replace(lower(nullif(utm_medium, '')), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_medium,
+        replace(replace(replace(lower(nullif(utm_source, '')), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_source,
+        replace(replace(replace(lower(nullif(utm_campaign, '')), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_campaign,
+        replace(replace(replace(lower(nullif(utm_term, '')), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_term,
+        replace(replace(replace(lower(nullif(utm_content, '')), '%20', ' '), '+', ' '), '%7c', '|') as original_utm_content
     from unioned
         left outer join unique_ad_id_channels as mapped on mapped.id = unioned.id
 )
