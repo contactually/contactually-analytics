@@ -47,9 +47,12 @@ models:
         materialized: table
   Snowplow:
     post-hook: "grant select on table {{this}} to looker"
+    vars:
+      events_table: "{{ ref('enriched_events') }}"
+      country_codes_table: 'dbt_dbanin.country_codes'
 
 profile: "contactually"
 
 repositories:
-  - "git@github.com:fishtown-analytics/snowplow.git"
+  - "git@github.com:fishtown-analytics/snowplow.git@fix/add-refr-fields"
   - "https://github.com/analyst-collective/dbt-audit.git"

@@ -24,5 +24,14 @@ with events as (
 select
 domain_userid || '-' || domain_sessionidx as session_id,
 md5(blended_user_id) as visitor_id,
+dvce_tstamp as dvce_created_tstamp,
+null as etl_tstamp,
+null as geo_country,
+null as geo_region,
+null as geo_city,
+null as geo_zipcode,
+null as geo_latitude,
+null as geo_longitude,
+null as dvce_screenwidth,
 *
 from joined

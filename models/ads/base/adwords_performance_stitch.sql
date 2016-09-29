@@ -10,6 +10,8 @@ with rawdata as (
     keyword,
     adcontent,
     adwordscampaignid as campaign_id,
+    campaign,
+    adgroup,
     adcontent || '-' || addestinationurl || '-' || adgroup || '-' || adwordscampaignid || '-' || campaign || '-' || date || '-' || keyword as composite_key
   from _1_all_contactually_property_traffic.adwords89732821_v2
 )
@@ -29,7 +31,11 @@ select
   nullif(split_part(split_part(url,'utm_term=',2), '&', 1), '') as utm_term,
   impressions,
   clicks,
-  cost
+  cost,
+  campaign,
+  adgroup,
+  adcontent,
+  keyword
 from rawdata
 
 --next, need to provide a rollup of this view that gets the key metrics that we care about first aggregated by utm params.

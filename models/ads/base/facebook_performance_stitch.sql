@@ -10,6 +10,10 @@ with ads as (
 
   select * from {{ref('facebook_ad_insights')}}
 
+), campaigns as (
+
+  select id as _campaign_id, name as campaign_name from facebook_contactually_ads.facebook_campaigns_26288427
+
 ), joined as (
 
   select
@@ -18,6 +22,7 @@ with ads as (
   from insights
     inner join ads on insights.ad_id = ads.id
     inner join creatives on ads.creative_id = creatives.id
+    inner join campaigns on campaigns._campaign_id = insights.campaign_id
 
 )
 
@@ -25,6 +30,7 @@ select
     composite_key,
     'fb_ads' as service,
     date_start::date as insight_date,
+    ad_id,
     utm_medium,
     utm_source,
     utm_campaign,
@@ -37,4 +43,4 @@ select
     sum(spend) as cost,
     sum(clicks) as clicks
   from joined
-  group by 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+  group by 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12

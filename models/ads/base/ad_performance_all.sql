@@ -1,14 +1,14 @@
 with adwords as (
 
     select md5(composite_key) as "id", service, date, campaign_id, base_url, utm_source,
-           utm_medium, utm_campaign, utm_content, utm_term, impressions, clicks, cost
+           utm_medium, utm_campaign, utm_content, utm_term, impressions, clicks, cost, url
     from {{ ref('adwords_performance_stitch') }}
 ),
 
 fb_ads as (
 
     select md5(composite_key), service, insight_date, campaign_id, base_url, utm_source,
-           utm_medium, utm_campaign, utm_content, utm_term, impressions, clicks, cost
+           utm_medium, utm_campaign, utm_content, utm_term, impressions, clicks, cost, url
     from {{ ref('facebook_performance_stitch') }}
 ),
 
@@ -64,7 +64,7 @@ unique_ad_id_channels as (
 
 with_channel as (
     select
-        unioned.id, service, "date", campaign_id, clicks, cost, impressions, 
+        unioned.id, service, "date", campaign_id, clicks, cost, impressions, url,
         mapped.channel,
         replace(replace(lower(base_url), 'http://', ''), 'https://', '') as base_url,
         replace(replace(replace(lower(utm_medium), '%20', ' '), '+', ' '), '%7c', '|') as utm_medium,
