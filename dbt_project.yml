@@ -54,5 +54,5 @@ models:
 profile: "contactually"
 
 repositories:
-  - "git@github.com:fishtown-analytics/snowplow.git@fix/add-refr-fields"
+  - "git@github.com:fishtown-analytics/snowplow.git@with-referer"
   - "https://github.com/analyst-collective/dbt-audit.git"
