@@ -21,7 +21,7 @@ with session_ranks as (
   min(session_start_tstamp) over (partition by blended_user_id) as first_touch_timestamp,
   max(session_end_tstamp) over (partition by blended_user_id) as last_touch_timestamp,
   users.team_id,
-  users.payment_account_id,
+  users.team_payment_account_id as payment_account_id,
   coalesce(users.user_added_after_team_paid, false) as user_added_after_team_paid
   from {{ref('sessions_enriched')}} s
   left outer join {{ref('enriched_users')}} users on users.id = s.user_id
