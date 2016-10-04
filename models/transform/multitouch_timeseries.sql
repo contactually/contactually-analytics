@@ -98,3 +98,4 @@ case when user_id is null then 0.0 -- don't attribute points if the visitor didn
 
 select * from with_ad_id
 where row_number = 1
+  and channel not ilike 'exclude'
