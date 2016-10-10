@@ -8,7 +8,9 @@ with session_ranks as (
   session_end_tstamp,
   replace(replace(lower(landing_page_host || landing_page_path), 'http://', ''), 'https://', '') as landing_page,
   replace(replace(lower(exit_page_host || exit_page_path), 'http://', ''), 'https://', '') as exit_page,
+  referrer_url,
   event_count,
+  pageviews_count,
   user_logged_in as user_logged_in_during_session,
   coalesce(channel, 'Direct') as channel,
   replace(replace(replace(lower(source), '%20', ' '), '+', ' '), '%7c', '|') as source,
@@ -43,12 +45,15 @@ case when user_id is null then 0.0 -- don't attribute points if the visitor didn
 ), transformed as (
 
     select session_start_tstamp as timestamp,
+           session_start_tstamp,
+           session_end_tstamp,
            session_number,
            sessions_count,
            session_id,
            visitor_id,
            landing_page,
            exit_page,
+           referrer_url,
            user_id,
            channel,
            source,
@@ -58,6 +63,9 @@ case when user_id is null then 0.0 -- don't attribute points if the visitor didn
            "content",
            attribution_type,
            attribution_points,
+
+           event_count,
+           pageviews_count,
 
            replace(replace(replace(lower(nullif(mkt_medium, '')), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_medium,
            replace(replace(replace(lower(nullif(mkt_source, '')), '%20', ' '), '+', ' '), '%7c', '|') as original_mkt_source,

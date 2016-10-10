@@ -31,6 +31,7 @@ us_and_ca_area_codes as (
 )
 
 select
+       base.*,
        case when mailing_country ilike 'us'
               or mailing_country ilike 'usa'
               or mailing_country ilike 'united states'

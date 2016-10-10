@@ -44,6 +44,7 @@ ct_data as (
 select
     salesforce_contactually_user.user__id___c as User_ID,
     salesforce_contactually_team.team__id___c as Team_ID,
+    ct_data.arr::float / 12.0 as Current_Mrr,
     salesforce_record_type.name as Account_Record_Type,
     case when salesforce_contactually_user.connected__accounts___c > 0
         then 'Yes'
@@ -86,7 +87,7 @@ select
         end as Is_MQL,
     case when (salesforce_record_type.name in ('Team - SMB Unpaid', 'Team - SMB Paid') and
                 salesforce_contactually_team.stage___c != 'Rejected MQL' and 
-                salesforce_contactually_team.no_call_tasks_reason_c = '')
+                (salesforce_contactually_team.no_call_tasks_reason_c = '' or salesforce_contactually_team.no_call_tasks_reason_c is null))
         then 'Yes'
         else 'No'
         end as Is_SQL, /*also criteria for "phone has US/Canada area code which is super complicated and basically validates the phone #*/

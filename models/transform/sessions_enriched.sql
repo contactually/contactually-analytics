@@ -56,7 +56,9 @@ unique_session_channels as (
   )
   where rank = 1
 )
-select s.*, usc.channel, usc.source, usc.campaign,
+select s.*,
+coalesce(s.refr_urlhost, '') || coalesce(s.refr_urlpath, '') as referrer_url,
+usc.channel, usc.source, usc.campaign,
 mkt_source as original_mkt_source, mkt_medium as original_mkt_medium,
 mkt_campaign as original_mkt_campaign, mkt_term as original_mkt_term,
 mkt_content as original_mkt_content
