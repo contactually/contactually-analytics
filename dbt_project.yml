@@ -61,6 +61,9 @@ models:
       materialized: table
       quickbooks_parent_class_map:
         enabled: true
+    base:
+      quickbooks_classes:
+        materialized: table
     transform:
       quickbooks_toplevel_account_metrics:
         materialized: table
