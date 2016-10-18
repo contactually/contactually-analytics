@@ -15,8 +15,8 @@ ledger as (
 
 select
     ledger.txn_date,
-    ledger.amount
+    ledger.amount,
     cogs_classes.fully_qualified_name,
 from ledger
 join cogs_classes on ledger.class_id = cogs_classes.id
-where ledger.transaction_type = 'debit';
+where ledger.transaction_type = 'debit'
