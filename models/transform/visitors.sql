@@ -1,5 +1,6 @@
 
-select visitor_id,
+select distinct
+    visitor_id,
     last_value(user_id ignore nulls) over (partition by visitor_id order by "timestamp" rows between unbounded preceding and unbounded following) as user_id,
     first_value(channel) over (partition by visitor_id order by "timestamp" rows between unbounded preceding and unbounded following) as first_touch_channel,
     first_value(medium) over (partition by visitor_id order by "timestamp" rows between unbounded preceding and unbounded following) as first_touch_medium,
