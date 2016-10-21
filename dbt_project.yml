@@ -68,6 +68,8 @@ models:
     transform:
       quickbooks_toplevel_account_metrics:
         materialized: table
+      quickbooks_toplevel_class_metrics:
+        materialized: table
 
     vars:
       "base.accounts"                     : "quickbooks.quickbooks_accounts"
