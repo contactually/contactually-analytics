@@ -16,13 +16,12 @@ accounts as (
 
   select * from {{ ref('quickbooks_accounts_xf') }}
 
-),
+)
 
 select
     ledger.txn_date,
     ledger.adj_amount,
     marketing_classes.class_name
-
 from ledger
 join marketing_classes on ledger.class_id = marketing_classes.class_id
 join accounts on accounts.id = account_id

@@ -1,8 +1,8 @@
 
 with cogs_classes as (
 
-    select * from {{ ref('quickbooks_classes') }}
-    where id in ('3100000000000547352', '3100000000000547361', '3100000000000559382')
+    select * from {{ ref('quickbooks_parent_class_map') }}
+    where top_level_class_id = '3100000000000559847'
 
 ),
 
@@ -20,10 +20,10 @@ accounts as (
 
 select
     ledger.txn_date,
-    ledger.amount,
-    cogs_classes.fully_qualified_name
+    ledger.adj_amount,
+    cogs_classes.class_name
 from ledger
-join cogs_classes on ledger.class_id = cogs_classes.id
+join cogs_classes on ledger.class_id = cogs_classes.class_id
 join accounts on accounts.id = ledger.account_id
 where accounts."statement" = 'is'
 and accounts.active = TRUE
