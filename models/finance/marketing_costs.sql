@@ -26,6 +26,4 @@ select
 from ledger
 join marketing_classes on ledger.class_id = marketing_classes.class_id
 join accounts on accounts.id = account_id
-
-where ledger.transaction_type = 'debit'
-  and accounts."statement" = 'is'
+where accounts."statement" = 'is'
