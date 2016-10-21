@@ -100,4 +100,4 @@ profile: "contactually"
 repositories:
   - "git@github.com:fishtown-analytics/snowplow.git@with-referer"
   - "https://github.com/analyst-collective/dbt-audit.git"
-  - "git@github.com:fishtown-analytics/quickbooks.git@with-types"
+  - "git@github.com:fishtown-analytics/quickbooks.git"
