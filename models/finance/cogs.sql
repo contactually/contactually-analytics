@@ -21,6 +21,7 @@ accounts as (
 select
     ledger.txn_date,
     ledger.adj_amount,
+    accounts.fully_qualified_name as account_name,
     cogs_classes.class_name
 from ledger
 join cogs_classes on ledger.class_id = cogs_classes.class_id
