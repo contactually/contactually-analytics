@@ -100,6 +100,6 @@ models:
 profile: "contactually"
 
 repositories:
-  - "git@github.com:fishtown-analytics/snowplow.git@with-referer"
+  - "git@github.com:fishtown-analytics/snowplow.git@with-refr"
   - "https://github.com/analyst-collective/dbt-audit.git"
   - "git@github.com:fishtown-analytics/quickbooks.git"
