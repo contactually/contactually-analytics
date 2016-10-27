@@ -26,7 +26,7 @@ base as (
 us_and_ca_area_codes as (
 
 
-    select area_code, state from dbt_dbanin.area_codes
+    select area_code, state from {{ this.schema }}.area_codes
 
 )
 

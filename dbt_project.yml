@@ -52,7 +52,7 @@ models:
     post-hook: "grant select on table {{this}} to looker"
     vars:
       events_table: "{{ ref('enriched_events') }}"
-      country_codes_table: 'dbt_dbanin.country_codes'
+      country_codes_table: 'analytics.country_codes'
 
   quickbooks:
     post-hook: "grant select on table {{this}} to looker"

@@ -27,7 +27,7 @@ unioned as (
         out_channel,
         out_source,
         out_campaign
-    from dbt_dbanin.channel_mapping
+    from {{ this.schema }}.channel_mapping
 ),
 
 ad_id_channel_mapping as (
