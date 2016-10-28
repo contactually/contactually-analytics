@@ -13,6 +13,11 @@ normalized_sessions as (
     lower(mkt_campaign) as campaign,
     lower(replace(refr_urlhost, 'www.', '')) as refr_urlhost_clean
     from sessions
+
+), channel_mapping as (
+
+    select * from fivetran_uploads.channel_mapping
+
 ), normal_channel_mapping as (
     select
         lower(in_medium)   as in_medium,
@@ -22,7 +27,7 @@ normalized_sessions as (
         out_channel,
         out_source,
         out_campaign
-    from {{ this.schema }}.channel_mapping
+    from channel_mapping
 ),
 session_channels as (
     select

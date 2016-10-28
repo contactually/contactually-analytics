@@ -18,6 +18,10 @@ unioned as (
     union all
     select * from fb_ads
 
+), channel_mapping as (
+
+    select * from fivetran_uploads.channel_mapping
+
 ), normal_channel_mapping as (
     select
         lower(in_medium)   as in_medium,
@@ -27,7 +31,7 @@ unioned as (
         out_channel,
         out_source,
         out_campaign
-    from {{ this.schema }}.channel_mapping
+    from channel_mapping
 ),
 
 ad_id_channel_mapping as (
