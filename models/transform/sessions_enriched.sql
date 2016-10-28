@@ -16,7 +16,7 @@ normalized_sessions as (
 
 ), channel_mapping as (
 
-    select * from fivetran_uploads.channel_mapping
+    select * from {{ ref('channel_mapping') }}
 
 ), normal_channel_mapping as (
     select
