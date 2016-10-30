@@ -25,7 +25,7 @@ with session_ranks as (
   users.team_id,
   users.team_payment_account_id as payment_account_id,
   coalesce(users.user_added_after_team_paid, false) as user_added_after_team_paid
-  from {{ref('sessions_enriched')}} s
+  from ref('sessions_enriched') s
   left outer join {{ref('enriched_users')}} users on users.id = s.user_id
   where
   (s.session_start_tstamp <= users.team_created_at or s.dvce_min_tstamp <= users.team_created_at or users.id is null)

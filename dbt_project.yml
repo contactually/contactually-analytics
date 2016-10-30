@@ -15,43 +15,13 @@ model-defaults:
   enabled: true
 
 models:
+  post-hook: "grant select on table {{this}} to looker"
   Contactually:
-    post-hook: "grant select on table {{this}} to looker"
-    base:
-      events:
-        materialized: table
-        sort: [domain_userid, domain_sessionidx]
-        dist: domain_userid
-    finance:
-      materialized: table
-    transform:
-      normal_channel_mapping:
-        materialized: table
-      sessions:
-        materialized: table
-      sessions_joined:
-        materialized: view
-      enriched_events:
-        materialized: table
-      sessions_enriched:
-        materialized: table
-        sort: [session_id, session_start_tstamp]
-        dist: session_id
-      multitouch:
-        enabled: false
-      multitouch_timeseries:
-        materialized: table
-    ads:
-      base:
-        ad_performance_all:
-          materialized: table
-      transform:
-        materialized: table
 
   Snowplow:
     post-hook: "grant select on table {{this}} to looker"
     vars:
-      events_table: "{{ ref('enriched_events') }}"
+      events_table: "{{ ref('base_events') }}"
       country_codes_table: 'analytics.country_codes'
 
   quickbooks:
@@ -100,6 +70,6 @@ models:
 profile: "contactually"
 
 repositories:
-  - "git@github.com:fishtown-analytics/snowplow.git@with-refr"
+  - "git@github.com:fishtown-analytics/snowplow.git@fix/prefix-snowplow"
   - "https://github.com/analyst-collective/dbt-audit.git"
   - "git@github.com:fishtown-analytics/quickbooks.git"
