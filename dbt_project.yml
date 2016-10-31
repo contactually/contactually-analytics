@@ -90,7 +90,7 @@ models:
 profile: "contactually"
 
 repositories:
-  - "git@github.com:fishtown-analytics/snowplow.git@0.2.0"
+  - "https://github.com/fishtown-analytics/snowplow.git@0.2.0"
   - "https://github.com/analyst-collective/dbt-audit.git"
-  - "git@github.com:fishtown-analytics/quickbooks.git"
+  - "https://github.com/fishtown-analytics/quickbooks.git"
   - "https://github.com/fishtown-analytics/facebook-ads"
