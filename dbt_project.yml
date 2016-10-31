@@ -13,6 +13,13 @@ data-paths: ["data"]
 models:
   post-hook: "grant select on table {{this}} to looker"
   Contactually:
+    ads:
+      base:
+        materialized: ephemeral
+    snowplow:
+      base:
+        materialized: ephemeral
+
  
   Snowplow:
     post-hook: "grant select on table {{this}} to looker"
@@ -63,7 +70,11 @@ models:
       "uses_classes"                       : "true"
  
   "facebook-ads":
-    enabled: true
+    materialized: ephemeral
+    stitch:
+      transform:
+        fb_ad_insights_xf:
+          materialized: view
     vars:
       ad_creatives_table                  : 'facebook_contactually_ads.facebook_adcreative_26288427'
       ads_insights_table                  : 'facebook_contactually_ads.facebook_ads_insights_26288427'
@@ -77,7 +88,7 @@ models:
 profile: "contactually"
 
 repositories:
-  - "git@github.com:fishtown-analytics/snowplow.git@fix/prefix-snowplow"
+  - "git@github.com:fishtown-analytics/snowplow.git@0.2.0"
   - "https://github.com/analyst-collective/dbt-audit.git"
   - "git@github.com:fishtown-analytics/quickbooks.git"
   - "https://github.com/fishtown-analytics/facebook-ads"

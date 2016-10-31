@@ -1,4 +1,12 @@
 
+{{
+    config(
+        materialized='table',
+        sort='blended_user_id',
+        dist='blended_user_id'
+    )
+}}
+
 with visitors as (
 
     select * from {{ ref('snowplow_visitors') }}
