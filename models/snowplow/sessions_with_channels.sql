@@ -7,6 +7,13 @@
     {% for field in nulls -%} and c.{{field}} is null {% endfor -%}
 {% endmacro %}
 
+{% macro clean_utm(utm_val, out_field) %}
+
+  replace(replace(replace(lower(nullif(trim({{ utm_val }}), '')), '%20', ' '), '+', ' '), '%7c', '|') as "{{ out_field }}"
+
+{% endmacro %}
+
+
 
 with sessions as (
 
@@ -19,11 +26,18 @@ with sessions as (
 ), normalized_sessions as (
 
     select
-    sessions.*,
-    lower(mkt_medium) as medium,
-    lower(mkt_source) as source,
-    lower(mkt_campaign) as campaign,
-    lower(replace(refr_urlhost, 'www.', '')) as refr_urlhost_clean
+
+        sessions.*,
+        lower(mkt_medium) as medium,
+        lower(mkt_source) as source,
+        lower(mkt_campaign) as campaign,
+        lower(replace(refr_urlhost, 'www.', '')) as refr_urlhost_clean,
+        {{ clean_utm('mkt_medium',   'cleaned_medium') }},
+        {{ clean_utm('mkt_source',   'cleaned_source') }},
+        {{ clean_utm('mkt_campaign', 'cleaned_campaign') }},
+        {{ clean_utm('mkt_content',  'cleaned_content') }},
+        {{ clean_utm('mkt_term',     'cleaned_term') }}
+
     from sessions
 
 ),

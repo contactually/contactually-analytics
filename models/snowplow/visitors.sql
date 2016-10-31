@@ -23,4 +23,4 @@ select distinct
 
     count(session_id) over (partition by visitor_id) as count_sessions
 
-from {{ ref('multitouch_timeseries') }}
+from  ref('multitouch_timeseries') 

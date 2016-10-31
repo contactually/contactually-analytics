@@ -1,4 +1,4 @@
-ads_rollup:
+ad_performance_all:
     constraints:
         unique:
             - id
