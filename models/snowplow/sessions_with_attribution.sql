@@ -15,7 +15,7 @@ with sessions as (
 
 users as (
 
-    select * from {{ ref('enriched_users') }}
+    select * from {{ ref('users') }}
 
 ),
 
