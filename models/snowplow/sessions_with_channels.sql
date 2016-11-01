@@ -119,12 +119,12 @@ best_session_mapping as (
 
         -- if it's a referral, make the souce the referring url (if the mapped source is null)
         case when {{ is_referral }} then
-            coalesce(out_source, refr_urlhost_clean)
+            coalesce(out_source, in_source, source, refr_urlhost_clean)
         else
-            out_source
+            coalesce(out_source, in_source, source)
         end as mapped_source,
 
-        out_campaign as mapped_campaign,
+        coalesce(out_campaign, in_campaign, campaign) as mapped_campaign,
 
         -- for deduplication (if channel mapping applies to > 1 session)
         row_number() over (partition by s.session_id order by c.id) as dedupe

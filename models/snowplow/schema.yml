@@ -33,6 +33,15 @@ sessions_with_attribution:
             - blended_sessionidx
             - domain_userid
 
+            # make sure every session gets between 0 and 1 points
+            - case when attribution_points <= 1.00 then true else null end
+
+            # make sure utm campaign passes through to mapped campaign
+            - case when mapped_campaign is null and mkt_campaign is not null then null else true end
+
+            # make sure utm source passes through to mapped source
+            - case when mapped_source is null and mkt_source is not null then null else true end
+
         unique:
             - blended_user_id || '-' || blended_sessionidx
             - domain_userid || '-' || domain_sessionidx
@@ -40,8 +49,5 @@ sessions_with_attribution:
 
         relationships:
             - { from: blended_user_id, to: visitors, field: blended_user_id }
-
-        accepted_values:
-            - { field: "(attribution_points <= 1.00)", values: [true] }
 
 
