@@ -49,7 +49,8 @@ ads as (
 with_ad_id as (
     select
         ads.id as ad_id,
-        s.session_id
+        s.session_id,
+        row_number() over (partition by s.session_id order by ads.id) as row_number
     from sessions as s
     inner join ads on
         ads.utm_source   = s.cleaned_source   and
@@ -61,4 +62,6 @@ with_ad_id as (
 )
 
 
-select ad_id, session_id from with_ad_id
+select ad_id, session_id
+from with_ad_id
+where row_number = 1
