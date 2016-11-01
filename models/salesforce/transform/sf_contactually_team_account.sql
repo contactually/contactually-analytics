@@ -58,6 +58,7 @@ select
     sf_user.contact___c as contact_id,
     sf_team.id          as account_id,
 
+    ct_data.arr::float as current_arr,
     ct_data.arr::float / 12.0 as current_mrr,
 
     sf_record_type.name as account_record_type,
@@ -97,6 +98,16 @@ select
     sf_record_type.name in ('Team - SMB Unpaid', 'Team - SMB Paid')
         and sf_team.stage___c != 'Rejected MQL'
         and (coalesce(sf_team.no_call_tasks_reason_c, '') = '') as is_sql,
+
+    sf_record_type.name in ('Team - SMB Unpaid', 'Team - SMB Paid')
+        and sf_team.stage___c != 'Rejected MQL'
+        and (coalesce(sf_team.no_call_tasks_reason_c, '') = '')
+        and (
+            sf_user.connected__accounts___c > 0 or
+            sf_user.connected__exchange__accounts___c or
+            sf_user.connected__gmail__accounts___c or
+            sf_user.connected__imap__accounts___c
+        ) as is_sql_with_email_account,
 
     case when (sf_record_type.name in ('Partner - Enterprise', 'Team - Enterprise') and
                 sf_team.stage___c = 'Active')

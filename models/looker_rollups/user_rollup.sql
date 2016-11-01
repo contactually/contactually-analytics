@@ -50,6 +50,7 @@ select
 
     -- sf_contactually_team_account fields
     current_mrr                              as current_mrr,
+    current_arr                              as current_arr,
     account_record_type                      as account_record_type,
     stripe_status                            as stripe_status,
     connected_email                          as connected_email,
@@ -61,6 +62,7 @@ select
     activation_funnel_percent                as activation_funnel_percent,
     is_mql                                   as is_mql,
     is_sql                                   as is_sql,
+    is_sql_with_email_account                as is_sql_with_email_account,
     customer_tier                            as customer_tier,
     user_added_after_team_paid               as user_added_after_team_paid,
 
