@@ -9,7 +9,7 @@ visitors:
         unique:
             - blended_user_id
 
-sessions_with_channels:
+sp_sessions_with_channels:
     constraints:
         not_null:
             - blended_user_id
@@ -23,9 +23,9 @@ sessions_with_channels:
             - session_id
 
         relationships:
-            - { from: blended_user_id, to: visitors, field: blended_user_id }
+            - { from: blended_user_id, to: sp_visitors, field: blended_user_id }
 
-sessions_with_attribution:
+sp_sessions_with_attribution:
     constraints:
         not_null:
             - blended_user_id
@@ -48,6 +48,6 @@ sessions_with_attribution:
             - session_id
 
         relationships:
-            - { from: blended_user_id, to: visitors, field: blended_user_id }
+            - { from: blended_user_id, to: sp_visitors, field: blended_user_id }
 
 

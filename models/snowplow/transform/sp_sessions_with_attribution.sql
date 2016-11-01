@@ -9,13 +9,13 @@
 
 with sessions as (
 
-    select * from {{ ref('sessions_with_channels') }}
+    select * from {{ ref('sp_sessions_with_channels') }}
 
 ),
 
 users as (
 
-    select * from {{ ref('users') }}
+    select * from {{ ref('app_users') }}
 
 ),
 

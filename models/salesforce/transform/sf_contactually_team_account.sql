@@ -34,7 +34,7 @@ discount_code as (
 
 payment_account as (
 
-    select * from {{ ref('payment_accounts') }}
+    select * from {{ ref('app_payment_accounts') }}
 
 ),
 

@@ -15,13 +15,13 @@ with visitors as (
 
 sessions as (
 
-    select * from {{ ref('sessions_with_attribution') }}
+    select * from {{ ref('sp_sessions_with_attribution') }}
 
 ),
 
 users as (
 
-    select * from {{ ref('users') }}
+    select * from {{ ref('app_users') }}
 
 ),
 

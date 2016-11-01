@@ -21,7 +21,7 @@ with sessions as (
         coalesce(cleaned_term, '')     as cleaned_term,
         coalesce(cleaned_content, '')  as cleaned_content
 
-    from {{ ref('sessions_with_attribution') }}
+    from {{ ref('sp_sessions_with_attribution') }}
 
 ),
 
