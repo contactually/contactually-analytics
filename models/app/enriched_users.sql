@@ -25,7 +25,7 @@ enriched_users_temp as (
                 when users.created_at::date > payment_accounts.first_charged_at::date then TRUE
            else FALSE end as user_added_after_team_paid
 
-    from {{ ref('users') }}
+    from users
 
     left outer join teams on teams.id = users.team_id
     left outer join payment_accounts on payment_accounts.id = teams.payment_account_id

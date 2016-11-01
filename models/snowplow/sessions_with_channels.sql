@@ -102,29 +102,37 @@ best_session_mapping as (
         from all_session_mappings
     ) s group by 1
 
+), mapped as (
+
+    {% set is_referral = 'medium is null and source is null and campaign is null and refr_urlhost_clean is not null and out_channel is null' %}
+
+    select s.*,
+        case when
+            medium is null and source is null and campaign is null and refr_urlhost_clean is null then 'direct'
+        when {{ is_referral }}
+             then 'referral'
+        when
+            out_channel is null then 'unmapped'
+        else
+            out_channel
+        end as channel,
+
+        -- if it's a referral, make the souce the referring url (if the mapped source is null)
+        case when {{ is_referral }} then
+            coalesce(out_source, refr_urlhost_clean)
+        else
+            out_source
+        end as mapped_source,
+
+        out_campaign as mapped_campaign,
+
+        -- for deduplication (if channel mapping applies to > 1 session)
+        row_number() over (partition by s.session_id order by c.id) as dedupe
+
+    from best_session_mapping as b
+        left outer join channel_mapping as c on c.id = b.channel_mapping_id
+        inner join normalized_sessions as s on b.session_id = s.session_id
 )
 
-{% set is_referral = 'medium is null and source is null and campaign is null and refr_urlhost_clean is not null and out_channel is null' %}
 
-select s.*,
-    case when
-        medium is null and source is null and campaign is null and refr_urlhost_clean is null then 'direct'
-    when {{ is_referral }}
-         then 'referral'
-    when
-        out_channel is null then 'unmapped'
-    else
-        out_channel
-    end as channel,
-
-    -- if it's a referral, make the souce the referring url (if the mapped source is null)
-    case when {{ is_referral }} then
-        coalesce(out_source, refr_urlhost_clean)
-    else
-        out_source
-    end as mapped_source,
-
-    out_campaign as mapped_campaign
-from best_session_mapping as b
-    left outer join channel_mapping as c on c.id = b.channel_mapping_id
-    inner join normalized_sessions as s on b.session_id = s.session_id
+select * from mapped where dedupe = 1
