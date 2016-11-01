@@ -29,12 +29,10 @@ xf as (
                   or mailing_country ilike 'united states'
                   or mailing_country ilike 'canada'
                   or mailing_country ilike 'ca'
-           then FALSE else TRUE end as is_outside_usa_and_canada,
+                  or mailing_country is null
+           then FALSE else TRUE end as is_outside_usa_and_canada
 
-           case when us_and_ca_area_codes.area_code is not null
-           then true else false end as phone_has_us_ca_area_code
     from contact
-    left outer join us_and_ca_area_codes on contact.area_code = us_and_ca_area_codes.area_code
 )
 
 
@@ -46,10 +44,11 @@ select contact_id           as  contact_id,
        mailing_country      as  contact_mailing_country,
        phone                as  contact_phone,
        title                as  contact_title,
-       area_code            as  contact_area_code,
-       is_outside_usa_and_canada as  contact_is_outside_usa_and_canada,
-       phone_has_us_ca_area_code as  contact_phone_has_us_ca_area_code
+       xf.area_code         as  contact_area_code,
+       is_outside_usa_and_canada as contact_is_outside_usa_and_canada,
+       us.area_code is not null  as contact_phone_has_us_ca_area_code
 
 from xf
+    left outer join us_and_ca_area_codes as us on xf.area_code = us.area_code
 
 

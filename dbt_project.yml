@@ -19,6 +19,11 @@ models:
     ads:
       base:
         materialized: ephemeral
+
+    salesforce:
+      base:
+        materialized: ephemeral
+
     snowplow:
       base:
         materialized: ephemeral

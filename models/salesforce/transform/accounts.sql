@@ -25,25 +25,23 @@ xf as (
            industry,
            number_of_employees,
            team__id___c as team_id,
-           substring(regexp_replace(phone, '[^0-9]', ''), 0, 4) as area_code
+           substring(regexp_replace(phone, '[^0-9]', ''), 0, 4) as area_code,
 
            case when billing_country ilike 'us'
                   or billing_country ilike 'usa'
                   or billing_country ilike 'united states'
                   or billing_country ilike 'canada'
                   or billing_country ilike 'ca'
-           then FALSE else TRUE end as is_outside_usa_and_canada,
+                  or billing_country is null
+           then FALSE else TRUE end as is_outside_usa_and_canada
 
-           case when us_and_ca_area_codes.area_code is not null
-           then true else false end as phone_has_us_ca_area_code
     from account
-    left outer join us_and_ca_area_codes on account.area_code = us_and_ca_area_codes.area_code
 
 )
 
 
 select
-    account_id          as account_account_id,
+    account_id          as account_id,
     billing_street      as account_billing_street,
     billing_city        as account_billing_city,
     billing_state       as account_billing_state,
@@ -54,7 +52,9 @@ select
     industry            as account_industry,
     number_of_employees as account_number_of_employees,
     team_id             as account_team_id,
-    area_cod            as account_area_codee
+    xf.area_code        as account_area_code,
     is_outside_usa_and_canada as account_is_outside_usa_and_canada,
-    phone_has_us_ca_area_code as account_phone_has_us_ca_area_code,
+    us.area_code is not null  as account_phone_has_us_ca_area_code
+
 from xf
+    left outer join us_and_ca_area_codes as us on xf.area_code = us.area_code

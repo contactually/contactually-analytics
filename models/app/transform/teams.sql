@@ -3,7 +3,7 @@ with teams as (
 
     select * from {{ ref('base_teams') }}
 
-),
+)
 
 
 select id,

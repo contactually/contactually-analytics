@@ -55,6 +55,9 @@ select
     sf_user.user__id___c as user_id,
     sf_team.team__id___c as team_id,
 
+    sf_user.contact___c as contact_id,
+    sf_team.id          as account_id,
+
     ct_data.arr::float / 12.0 as current_mrr,
 
     sf_record_type.name as account_record_type,
@@ -89,7 +92,7 @@ select
     end as activation_funnel_percent,
 
     sf_record_type.name in ('Team - SMB Unpaid', 'Team - SMB Paid')
-        and sf_team.stage___c != 'Rejected MQL') as is_mql,
+        and sf_team.stage___c != 'Rejected MQL' as is_mql,
 
     sf_record_type.name in ('Team - SMB Unpaid', 'Team - SMB Paid')
         and sf_team.stage___c != 'Rejected MQL'
@@ -113,7 +116,7 @@ select
     end as customer_tier,
 
     case when payment_account.first_charged_at is null then FALSE
-         when convert_timezone('UTC', 'America/New_York', sf_user.sign__up__date___c) <= payment_account.first_charged_at) then true
+         when convert_timezone('UTC', 'America/New_York', sf_user.sign__up__date___c) <= payment_account.first_charged_at then true
          else false
     end as user_added_after_team_paid
 

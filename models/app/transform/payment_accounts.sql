@@ -7,7 +7,7 @@ with payment_accounts as (
 
     select id, coalesce(partner_display_name, code_name) as partner_name from {{ ref('base_partners') }}
 
-),
+)
 
 
 select
@@ -17,6 +17,7 @@ select
     quantity,
     created_at,
     updated_at,
+    first_charged_at,
     last_charged_at,
     partners.partner_name
 
