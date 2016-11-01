@@ -58,7 +58,6 @@ with_ad_id as (
         ads.utm_term     = s.cleaned_term     and
         ads.utm_content  = s.cleaned_content  and
         ads.date         = s.date
-        -- TODO : check for landing page = Ad url?
 )
 
 
