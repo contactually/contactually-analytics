@@ -14,6 +14,7 @@
 with sessions as (
 
     select session_id,
+        landing_page,
         session_start_tstamp::date as date,
         coalesce(cleaned_source, '')   as cleaned_source,
         coalesce(cleaned_medium, '')   as cleaned_medium,
@@ -28,6 +29,7 @@ with sessions as (
 ads as (
 
     select id,
+        base_url,
         date::date as date,
         coalesce(utm_source, '')   as utm_source,
         coalesce(utm_medium, '')   as utm_medium,
@@ -37,11 +39,13 @@ ads as (
 
     from {{ ref('ad_performance_all') }}
     where
-        utm_source is not null and
-        utm_medium is not null and
-        utm_campaign is not null and
-        utm_term is not null and
-        utm_content is not null
+        not (
+            utm_source   is null and
+            utm_medium   is null and
+            utm_campaign is null and
+            utm_term     is null and
+            utm_content  is null
+        )
 
 ),
 
@@ -58,6 +62,7 @@ with_ad_id as (
         ads.utm_campaign = s.cleaned_campaign and
         ads.utm_term     = s.cleaned_term     and
         ads.utm_content  = s.cleaned_content  and
+        ads.base_url     = s.landing_page     and
         ads.date         = s.date
 )
 

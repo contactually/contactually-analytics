@@ -51,5 +51,32 @@ cleaned as (
     from unioned
 )
 
-select * from cleaned
+select
+    md5(
+        service
+        || '-' || date
+        || '-' || campaign_id
+        || '-' || url
+        || '-' || base_url
+        || '-' || coalesce(utm_medium, '')
+        || '-' || coalesce(utm_source, '')
+        || '-' || coalesce(utm_campaign, '')
+        || '-' || coalesce(utm_content, '')
+        || '-' || coalesce(utm_term, '')
+    ) as id,
+    service,
+    date,
+    campaign_id,
+    url,
+    base_url,
+    utm_medium,
+    utm_source,
+    utm_campaign,
+    utm_content,
+    utm_term,
+    sum(impressions) as impressions,
+    sum(clicks)      as click,
+    sum(cost)        as cost
+from cleaned
 where "date" > '2016-07-04'
+group by 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
