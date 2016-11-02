@@ -55,9 +55,9 @@ select
     md5(
         service
         || '-' || date
-        || '-' || campaign_id
-        || '-' || url
-        || '-' || base_url
+        || '-' || coalesce(campaign_id, '')
+        || '-' || coalesce(url, '')
+        || '-' || coalesce(base_url, '')
         || '-' || coalesce(utm_medium, '')
         || '-' || coalesce(utm_source, '')
         || '-' || coalesce(utm_campaign, '')
@@ -75,7 +75,7 @@ select
     utm_content,
     utm_term,
     sum(impressions) as impressions,
-    sum(clicks)      as click,
+    sum(clicks)      as clicks,
     sum(cost)        as cost
 from cleaned
 where "date" > '2016-07-04'
