@@ -88,6 +88,7 @@ middle_touches as (
 )
 
 select visitors.*,
+       users.id as user_id,
 
        first_touch.first_touch_channel,
        first_touch.first_touch_medium,
@@ -115,4 +116,5 @@ from visitors
     left outer join first_touch on first_touch.blended_user_id = visitors.blended_user_id
     left outer join last_touch on last_touch.blended_user_id = visitors.blended_user_id
     left outer join middle_touches on middle_touches.blended_user_id = visitors.blended_user_id
+    left outer join users on users.id = visitors.inferred_user_id
 
