@@ -117,4 +117,3 @@ from visitors
     left outer join last_touch on last_touch.blended_user_id = visitors.blended_user_id
     left outer join middle_touches on middle_touches.blended_user_id = visitors.blended_user_id
     left outer join users on users.id = visitors.blended_user_id
-

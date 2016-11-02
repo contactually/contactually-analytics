@@ -20,4 +20,4 @@ select
     admin = 1 as admin,
     dead
 from users
-where deleted_at is null
+--where deleted_at is null

@@ -28,6 +28,10 @@ models:
       base:
         materialized: ephemeral
 
+    finance:
+      tables:
+        materialized: table
+
   Snowplow:
     post-hook: "grant select on table {{this}} to looker"
     vars:

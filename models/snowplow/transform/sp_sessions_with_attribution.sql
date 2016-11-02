@@ -32,8 +32,8 @@ pre_user_creation_sessions as (
     from sessions s
         left outer join users on users.id = s.inferred_user_id
     where (
-        s.session_start_tstamp <= users.created_at or
-        s.min_dvce_created_tstamp <= users.created_at or
+        convert_timezone('UTC', 'America/New_York', s.session_start_tstamp) < users.created_at or
+        convert_timezone('UTC', 'America/New_York', s.min_dvce_created_tstamp) < users.created_at or
         users.id is null
     )
 ),
