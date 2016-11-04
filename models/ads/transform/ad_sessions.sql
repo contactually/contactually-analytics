@@ -31,9 +31,9 @@ ads as (
     select id,
         base_url,
         date::date as date,
-        coalesce(utm_source, '')   as utm_source,
         coalesce(utm_medium, '')   as utm_medium,
-        coalesce(utm_campaign, '') as utm_campaign,
+        coalesce(og_utm_source, '')   as utm_source,
+        coalesce(og_utm_campaign, '') as utm_campaign,
         coalesce(utm_term, '')     as utm_term,
         coalesce(utm_content, '')  as utm_content
 
@@ -57,13 +57,15 @@ with_ad_id as (
         row_number() over (partition by s.session_id order by ads.id) as row_number
     from sessions as s
     inner join ads on
-        ads.utm_source   = s.cleaned_source   and
         ads.utm_medium   = s.cleaned_medium   and
+        ads.utm_source   = s.cleaned_source   and
         ads.utm_campaign = s.cleaned_campaign and
         ads.utm_term     = s.cleaned_term     and
         ads.utm_content  = s.cleaned_content  and
-        ads.base_url     = s.landing_page     and
-        ads.date         = s.date
+        ads.date         = s.date             and
+
+        -- ad url is sometimes null -- just match on UTM params if that's the case
+        (ads.base_url is null or ads.base_url = s.landing_page)
 )
 
 
