@@ -1,6 +1,6 @@
 
 
-visitors:
+sp_visitors:
     constraints:
         not_null:
             - blended_user_id
