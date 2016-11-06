@@ -10,49 +10,33 @@ test-paths: ["test"]
 analysis-paths: ["analysis"]
 data-paths: ["data"]
 
-model-defaults:
-  materialized: view
-  enabled: true
-
 models:
+  post-hook: "grant select on table {{this}} to looker"
   Contactually:
-    post-hook: "grant select on table {{this}} to looker"
-    base:
-      events:
-        materialized: table
-        sort: [domain_userid, domain_sessionidx]
-        dist: domain_userid
-    finance:
-      materialized: table
-    transform:
-      normal_channel_mapping:
-        materialized: table
-      sessions:
-        materialized: table
-      sessions_joined:
-        materialized: view
-      enriched_events:
-        materialized: table
-      sessions_enriched:
-        materialized: table
-        sort: [session_id, session_start_tstamp]
-        dist: session_id
-      multitouch:
-        enabled: false
-      multitouch_timeseries:
-        materialized: table
+    app:
+      base:
+        materialized: ephemeral
     ads:
       base:
-        ad_performance_all:
-          materialized: table
-      transform:
+        materialized: ephemeral
+
+    salesforce:
+      base:
+        materialized: ephemeral
+
+    snowplow:
+      base:
+        materialized: ephemeral
+
+    finance:
+      tables:
         materialized: table
 
   Snowplow:
     post-hook: "grant select on table {{this}} to looker"
     vars:
-      events_table: "{{ ref('enriched_events') }}"
-      country_codes_table: 'analytics.country_codes'
+      events_table: "{{ ref('base_events') }}"
+      country_codes_table: '{{ this.schema }}.country_codes'
 
   quickbooks:
     post-hook: "grant select on table {{this}} to looker"
@@ -70,7 +54,7 @@ models:
         materialized: table
       quickbooks_toplevel_class_metrics:
         materialized: table
-
+ 
     vars:
       "base.accounts"                     : "quickbooks.quickbooks_accounts"
       "base.bills_line"                   : "quickbooks.quickbooks_bills__line"
@@ -95,11 +79,27 @@ models:
       "level_0_id_field"                  : "_sdc_level_0_id"
       "source_key_id_field"               : "_sdc_source_key_id"
       "uses_classes"                       : "true"
+ 
+  "facebook-ads":
+    materialized: ephemeral
+    stitch:
+      transform:
+        fb_ad_insights_xf:
+          materialized: view
+    vars:
+      ad_creatives_table                  : 'facebook_contactually_ads.facebook_adcreative_26288427'
+      ads_insights_table                  : 'facebook_contactually_ads.facebook_ads_insights_26288427'
+      ads_table                           : 'facebook_contactually_ads.facebook_ads_26288427'
+      ads_insights_agegender_table        : 'facebook_contactually_ads.facebook_ads_insights_age_and_gender_26288427'
+      ads_insights_country_table          : 'facebook_contactually_ads.facebook_ads_insights_country_26288427'
+      ads_insights_placement_device_table : 'facebook_contactually_ads.facebook_ads_insights_placement_and_device_26288427'
+      campaigns_table                     : 'facebook_contactually_ads.facebook_campaigns_26288427'
 
 
 profile: "contactually"
 
 repositories:
-  - "git@github.com:fishtown-analytics/snowplow.git@with-refr"
+  - "https://github.com/fishtown-analytics/snowplow.git@0.2.0"
   - "https://github.com/analyst-collective/dbt-audit.git"
-  - "git@github.com:fishtown-analytics/quickbooks.git"
+  - "https://github.com/fishtown-analytics/quickbooks.git"
+  - "https://github.com/fishtown-analytics/facebook-ads"

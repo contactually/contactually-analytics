@@ -1,0 +1,28 @@
+
+ad_performance_all:
+    constraints:
+
+        unique:
+            - id
+
+        not_null:
+            - id
+            - date
+
+        accepted_values:
+            - { field: service, values: ['fb-ads', 'adwords'] }
+
+
+ad_sessions:
+    constraints:
+
+        unique:
+            - session_id
+
+        not_null:
+            - session_id
+            - ad_id
+
+        relationships:
+            - { from: session_id, to: sp_sessions_with_attribution, field: session_id }
+            - { from: ad_id, to: ad_performance_all, field: id }
