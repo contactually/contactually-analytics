@@ -6,7 +6,7 @@ version: '0.0.0.1'
 source-paths: ["models"]
 target-path: "target"
 clean-targets: ["target"]
-test-paths: ["test"]
+test-paths: ["tests"]
 analysis-paths: ["analysis"]
 data-paths: ["data"]
 
