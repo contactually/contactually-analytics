@@ -31,6 +31,8 @@ models:
     finance:
       tables:
         materialized: table
+        sort: txn_date
+        dist: all
 
   Snowplow:
     post-hook: "grant select on table {{this}} to looker"
