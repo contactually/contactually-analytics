@@ -102,6 +102,5 @@ profile: "contactually"
 
 repositories:
   - "https://github.com/fishtown-analytics/snowplow.git@0.2.0"
-  - "https://github.com/analyst-collective/dbt-audit.git"
-  - "https://github.com/fishtown-analytics/quickbooks.git"
-  - "https://github.com/fishtown-analytics/facebook-ads"
+  - "https://github.com/fishtown-analytics/quickbooks.git@v0.1.0"
+  - "https://github.com/fishtown-analytics/facebook-ads@v0.1.0"
