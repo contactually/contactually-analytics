@@ -103,4 +103,4 @@ profile: "contactually"
 repositories:
   - "https://github.com/fishtown-analytics/snowplow.git@0.2.0"
   - "https://github.com/fishtown-analytics/quickbooks.git@v0.1.0"
-  - "https://github.com/fishtown-analytics/facebook-ads@v0.1.0"
+  - "https://github.com/fishtown-analytics/facebook-ads@v0.1.5"
