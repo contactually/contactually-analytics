@@ -1,0 +1,4 @@
+version: 0
+jobs:
+  run_every_6_hours:
+    schedule: 0 0,6,12,18 * * *
