@@ -27,6 +27,8 @@ models:
     snowplow:
       base:
         materialized: ephemeral
+        base_events:
+          materialized: view
 
     finance:
       tables:
