@@ -91,7 +91,7 @@ models:
         fb_ad_insights_xf:
           materialized: view
     vars:
-      ad_creatives_table                  : 'facebook_contactually_ads.facebook_adcreative_26288427'
+      ad_creatives_table                  : '{{ ref("input_facebook_stitch") }}'
       ads_insights_table                  : 'facebook_contactually_ads.facebook_ads_insights_26288427'
       ads_table                           : 'facebook_contactually_ads.facebook_ads_26288427'
       ads_insights_agegender_table        : 'facebook_contactually_ads.facebook_ads_insights_age_and_gender_26288427'
