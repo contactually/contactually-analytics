@@ -71,7 +71,8 @@ select distinct
       end) as last_touch_out_channel,
   last_touch_mapping.out_source as last_touch_out_source,
   last_touch_mapping.out_medium as last_touch_out_medium,
-  last_touch_mapping.out_campaign as last_touch_out_campaign
+  last_touch_mapping.out_campaign as last_touch_out_campaign,
+  sp_sessions.last_touch_landing_page
 from snowplow_sessions_with_key sp_sessions
   left join smc_mapping first_touch_mapping
     on sp_sessions.first_touch_smc_key = lower(first_touch_mapping.smc_key)
