@@ -29,6 +29,11 @@ models:
         materialized: ephemeral
         base_events:
           materialized: view
+        user_session_events:
+          materialized: table
+      transform:
+        pre_trial_attribution:
+          materialized: table
 
     finance:
       tables:
