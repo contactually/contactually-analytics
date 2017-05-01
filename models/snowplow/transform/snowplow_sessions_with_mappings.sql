@@ -47,6 +47,12 @@ with pre_trial_attribution as (
 select distinct
   sp_sessions.blended_user_id,
   sp_sessions.first_touch_date,
+  sp_sessions.last_touch_date,
+  sp_sessions.session_count,
+  sp_sessions.bounced_sessions,
+  sp_sessions.engaged_sessions,
+  sp_sessions.time_on_site_in_s,
+  sp_sessions.page_view_count,
   sp_sessions.first_touch_in_source,
   sp_sessions.first_touch_in_medium,
   sp_sessions.first_touch_in_campaign,
@@ -57,7 +63,17 @@ select distinct
       end) as first_touch_out_channel,
   first_touch_mapping.out_source as first_touch_out_source,
   first_touch_mapping.out_medium as first_touch_out_medium,
-  first_touch_mapping.out_campaign as first_touch_out_campaign
+  first_touch_mapping.out_campaign as first_touch_out_campaign,
+  sp_sessions.first_touch_landing_page,
+  nvl(last_touch_mapping.out_channel,
+      case when sp_sessions.last_touch_smc_key is null
+        then 'direct'
+      end) as last_touch_out_channel,
+  last_touch_mapping.out_source as last_touch_out_source,
+  last_touch_mapping.out_medium as last_touch_out_medium,
+  last_touch_mapping.out_campaign as last_touch_out_campaign
 from snowplow_sessions_with_key sp_sessions
   left join smc_mapping first_touch_mapping
     on sp_sessions.first_touch_smc_key = lower(first_touch_mapping.smc_key)
+  left join smc_mapping last_touch_mapping
+    on sp_sessions.last_touch_smc_key = lower(last_touch_mapping.smc_key)
