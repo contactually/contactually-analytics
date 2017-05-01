@@ -63,7 +63,7 @@ models:
         materialized: table
       quickbooks_toplevel_class_metrics:
         materialized: table
-dbt
+
     vars:
       "base.accounts"                     : "quickbooks.quickbooks_accounts"
       "base.bills_line"                   : "quickbooks.quickbooks_bills__line"
