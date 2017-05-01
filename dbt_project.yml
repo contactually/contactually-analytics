@@ -34,6 +34,8 @@ models:
       transform:
         pre_trial_attribution:
           materialized: table
+        snowplow_sessions_with_mappings:
+          materialized: table
 
     finance:
       tables:
