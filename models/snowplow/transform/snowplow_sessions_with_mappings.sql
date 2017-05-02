@@ -57,6 +57,10 @@ select distinct
   sp_sessions.first_touch_in_medium,
   sp_sessions.first_touch_in_campaign,
   sp_sessions.first_touch_in_referer,
+  sp_sessions.last_touch_in_source,
+  sp_sessions.last_touch_in_medium,
+  sp_sessions.last_touch_in_campaign,
+  sp_sessions.last_touch_in_referer,
   nvl(first_touch_mapping.out_channel,
       case when sp_sessions.first_touch_smc_key is null
         then 'direct'
