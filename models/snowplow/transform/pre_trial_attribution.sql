@@ -69,8 +69,8 @@ select distinct
   last_touch.referer_url as last_touch_in_referer,
   last_touch.page_url as last_touch_landing_page,
   /********MIDDLE TOUCH********/
-  first_touch.user_event_index,
-  last_touch.user_event_index,
+  first_touch.user_event_index as first_touch_user_event_index,
+  last_touch.user_event_index as last_touch_user_event_index,
   listagg(middle_touch.mkt_medium, ',') within group (order by middle_touch.user_event_index) as middle_touch_mediums,
   listagg(middle_touch.mkt_source, ',') within group (order by middle_touch.user_event_index) as middle_touch_sources,
   listagg(middle_touch.mkt_campaign, ',') within group (order by middle_touch.user_event_index) as middle_touch_campaigns,
