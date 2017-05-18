@@ -67,7 +67,7 @@ select distinct
   end as last_touch_in_source,
   last_touch.mkt_campaign as last_touch_in_campaign,
   last_touch.referer_url as last_touch_in_referer,
-  last_touch.page_url as last_touch_landing_page,
+  last_touch.page_url as last_touch_landing_page/*,
   /********MIDDLE TOUCH********/
   first_touch.user_event_index as first_touch_user_event_index,
   last_touch.user_event_index as last_touch_user_event_index,
@@ -75,7 +75,7 @@ select distinct
   listagg(middle_touch.mkt_source, ',') within group (order by middle_touch.user_event_index) as middle_touch_sources,
   listagg(middle_touch.mkt_campaign, ',') within group (order by middle_touch.user_event_index) as middle_touch_campaigns,
   listagg(middle_touch.referer_url, ',') within group (order by middle_touch.user_event_index) as middle_touch_referers,
-  listagg(middle_touch.page_url, ',') within group (order by middle_touch.user_event_index) as middle_touch_landing_pages
+  listagg(middle_touch.page_url, ',') within group (order by middle_touch.user_event_index) as middle_touch_landing_pages*/
 from (select distinct blended_user_id
       from user_session_events
      )base
@@ -98,4 +98,4 @@ from (select distinct blended_user_id
        and middle_touch.pre_trial_session_flag = 1
   inner join pre_trial_session_totals totals
     on totals.blended_user_id = indexes.blended_user_id
-group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
+--group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
