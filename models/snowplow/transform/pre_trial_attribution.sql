@@ -6,43 +6,6 @@ with user_session_events as (
      events.blended_user_id,
      min(events.user_event_index) as min_user_event_index,
      max(events.user_event_index) as max_user_event_index,
-     max(events.domain_sessionidx) as max_session_index
-   from
-     user_session_events events
-   where events.pre_trial_session_flag = 1
-   group by 1),
-    pre_trial_session_totals as
-  (select
-     blended_user_id,
-     sum(session_duration_in_s) as time_on_site_in_s,
-     sum(case when session_duration_in_s = 0 then 1 else 0 end) as bounced_sessions,
-     sum(case when session_duration_in_s >= 30 then 1 else 0 end) as engaged_sessions,
-     sum(page_view_count) as page_view_count,
-     max(domain_sessionidx) as session_count
-   from
-     (
-       select
-         events.blended_user_id,
-         events.domain_sessionidx,
-         sum( events.event_duration_in_s ) as session_duration_in_s,
-         sum( case when events.event = 'pv'
-           then 1
-              else 0 end ) as page_view_count
-       from
-         user_session_events events
-       where events.pre_trial_session_flag = 1
-       group by 1,2)
-   group by 1
-  )
-with user_session_events as (
-    select * from analytics.user_session_events
-    where blended_user_id = '210a75cb2bc7b940'
-),
-    pre_trial_session_indexes as
-  (select
-     events.blended_user_id,
-     min(events.user_event_index) as min_user_event_index,
-     max(events.user_event_index) as max_user_event_index,
      max(events.domain_sessionidx) as max_session_index,
      min(events.domain_sessionidx) as min_session_index
    from
