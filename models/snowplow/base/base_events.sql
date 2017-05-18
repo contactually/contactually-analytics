@@ -139,12 +139,12 @@ select
     -- Missing from Fivetran -- injected above
     "dvce_created_tstamp",
     "etl_tstamp",
-    "geo_country",
-    "geo_region",
-    "geo_city",
-    "geo_zipcode",
-    "geo_latitude",
-    "geo_longitude",
-    "dvce_screenwidth"
+    null as "geo_country",
+    null as "geo_region",
+    null as "geo_city",
+    null as "geo_zipcode",
+    null as "geo_latitude",
+    null as "geo_longitude",
+    null as "dvce_screenwidth"
 
 from fixed
