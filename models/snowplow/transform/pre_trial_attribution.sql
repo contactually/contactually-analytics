@@ -1,40 +1,40 @@
 with user_session_events as (
   select * from {{ ref('user_session_events') }}
 ),
-    pre_trial_session_indexes as
-  (select
+pre_trial_session_indexes as (
+select
+ events.blended_user_id,
+ min(events.user_event_index) as min_user_event_index,
+ max(events.user_event_index) as max_user_event_index,
+ max(events.domain_sessionidx) as max_session_index,
+ min(events.domain_sessionidx) as min_session_index
+from
+ user_session_events events
+where events.pre_trial_session_flag = 1
+group by 1),
+pre_trial_session_totals as
+(select
+ blended_user_id,
+ sum(session_duration_in_s) as time_on_site_in_s,
+ sum(case when session_duration_in_s = 0 then 1 else 0 end) as bounced_sessions,
+ sum(case when session_duration_in_s >= 30 then 1 else 0 end) as engaged_sessions,
+ sum(page_view_count) as page_view_count,
+ max(domain_sessionidx) as session_count
+from
+ (
+   select
      events.blended_user_id,
-     min(events.user_event_index) as min_user_event_index,
-     max(events.user_event_index) as max_user_event_index,
-     max(events.domain_sessionidx) as max_session_index,
-     min(events.domain_sessionidx) as min_session_index
+     events.domain_sessionidx,
+     sum( events.event_duration_in_s ) as session_duration_in_s,
+     sum( case when events.event = 'pv'
+       then 1
+          else 0 end ) as page_view_count
    from
      user_session_events events
    where events.pre_trial_session_flag = 1
-   group by 1),
-    pre_trial_session_totals as
-  (select
-     blended_user_id,
-     sum(session_duration_in_s) as time_on_site_in_s,
-     sum(case when session_duration_in_s = 0 then 1 else 0 end) as bounced_sessions,
-     sum(case when session_duration_in_s >= 30 then 1 else 0 end) as engaged_sessions,
-     sum(page_view_count) as page_view_count,
-     max(domain_sessionidx) as session_count
-   from
-     (
-       select
-         events.blended_user_id,
-         events.domain_sessionidx,
-         sum( events.event_duration_in_s ) as session_duration_in_s,
-         sum( case when events.event = 'pv'
-           then 1
-              else 0 end ) as page_view_count
-       from
-         user_session_events events
-       where events.pre_trial_session_flag = 1
-       group by 1,2)
-   group by 1
-  )
+   group by 1,2)
+group by 1
+)
 select distinct
   base.blended_user_id,
   totals.session_count,
@@ -67,15 +67,13 @@ select distinct
   end as last_touch_in_source,
   last_touch.mkt_campaign as last_touch_in_campaign,
   last_touch.referer_url as last_touch_in_referer,
-  last_touch.page_url as last_touch_landing_page/*,
+  last_touch.page_url as last_touch_landing_page,
   /********MIDDLE TOUCH********/
-  first_touch.user_event_index as first_touch_user_event_index,
-  last_touch.user_event_index as last_touch_user_event_index,
-  listagg(middle_touch.mkt_medium, ',') within group (order by middle_touch.user_event_index) as middle_touch_mediums,
-  listagg(middle_touch.mkt_source, ',') within group (order by middle_touch.user_event_index) as middle_touch_sources,
-  listagg(middle_touch.mkt_campaign, ',') within group (order by middle_touch.user_event_index) as middle_touch_campaigns,
-  listagg(middle_touch.referer_url, ',') within group (order by middle_touch.user_event_index) as middle_touch_referers,
-  listagg(middle_touch.page_url, ',') within group (order by middle_touch.user_event_index) as middle_touch_landing_pages*/
+  listagg(middle_touch.mkt_medium, ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_mediums,
+  listagg(middle_touch.mkt_source, ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_sources,
+  listagg(middle_touch.mkt_campaign, ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_campaigns,
+  listagg(middle_touch.referer_url, ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_referers,
+  listagg(middle_touch.page_url, ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_landing_pages
 from (select distinct blended_user_id
       from user_session_events
      )base
@@ -93,9 +91,10 @@ from (select distinct blended_user_id
        and last_touch.pre_trial_session_flag = 1
   left join user_session_events middle_touch
     on indexes.blended_user_id = middle_touch.blended_user_id
-       and middle_touch.user_event_index > first_touch.user_event_index
-       and middle_touch.user_event_index < last_touch.user_event_index
+       and middle_touch.domain_sessionidx > indexes.min_session_index
+       and middle_touch.domain_sessionidx < indexes.max_session_index
+       and middle_touch.session_event_index = 1
        and middle_touch.pre_trial_session_flag = 1
   inner join pre_trial_session_totals totals
     on totals.blended_user_id = indexes.blended_user_id
---group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
+group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
