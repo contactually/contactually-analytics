@@ -2,10 +2,15 @@ with snowplow_user_id_map as
 (select distinct
    events.user_id,
    users.created_at,
+   payment_accounts.first_charged_at,
    events.domain_userid
  from snowplow.event events
    left join postgres_public.users users
      on events.user_id = users.id
+   left join postgres_public.teams teams
+     on users.team_id = teams.id
+   left join postgres_public.payment_accounts payment_accounts
+     on teams.payment_account_id = payment_accounts.id
  where events.event not in ('pp','pv')
        and events.user_id is not null
  order by events.user_id)
@@ -21,6 +26,10 @@ select
     then 1
   else 0
   end as pre_trial_session_flag,
+  case when (map.user_id is null) or (map.user_id is not null and map.first_charged_at is null) or (map.first_charged_at is not null and session_start < map.first_charged_at)
+    then 1
+  else 0
+  end as pre_customer_session_flag,
   events.domain_sessionid,
   events.domain_sessionidx,
   session_times.session_start,

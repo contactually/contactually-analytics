@@ -34,7 +34,11 @@ models:
       transform:
         pre_trial_attribution:
           materialized: table
-        snowplow_sessions_with_mappings:
+        pre_trial_sessions_with_mappings:
+          materialized: table
+        pre_customer_attribution:
+          materialized: table
+        pre_customer_sessions_with_mappings:
           materialized: table
 
     finance:
