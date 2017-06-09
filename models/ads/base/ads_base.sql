@@ -102,7 +102,7 @@ with versions as (
      adwords.adclicks as clicks,
      adwords.adcost as cost
    from _1_all_contactually_property_traffic.adwords89732821_v2 adwords
-   where adwords.date >= '2017-06-01'
+   where adwords.date > '2016-07-04'
    union all
    select
      'fb-ads' as service,
@@ -119,7 +119,7 @@ with versions as (
      clicks,
      cost
    from facebooks_ads
-   where date_day >= '2017-06-01'
+   where date_day > '2016-07-04'
   )
 select
   service,
