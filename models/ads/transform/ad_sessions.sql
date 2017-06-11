@@ -2,8 +2,7 @@
 {{ config(
     materialized='table',
     sort=['session_id', 'ad_id'],
-    dist='session_id',
-    enabled=False
+    dist='session_id'
   )
 }}
 

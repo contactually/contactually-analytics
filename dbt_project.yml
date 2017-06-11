@@ -19,6 +19,8 @@ models:
     ads:
       base:
         materialized: ephemeral
+      transform:
+        enabled: false
 
     salesforce:
       base:
