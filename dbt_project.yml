@@ -19,6 +19,13 @@ models:
     ads:
       base:
         materialized: ephemeral
+      transform:
+        ad_performance_all_base:
+          enabled: false
+        ad_performance_all:
+          enabled: false
+        ad_sessions:
+          enabled: false
 
     salesforce:
       base:
