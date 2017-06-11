@@ -3,7 +3,7 @@
     materialized='table',
     sort=['session_id', 'ad_id'],
     dist='session_id',
-    enabled=FALSE
+    enabled='False'
   )
 }}
 
