@@ -2,13 +2,14 @@
 {{ config(
     materialized='table',
     sort=['session_id', 'ad_id'],
-    dist='session_id'
+    dist='session_id',
+    enabled=FALSE
   )
 }}
 
 
 -- coalesce null values to empty strings so that our join on utm params
--- can be a simple equality. Using (ad.utm_* = session.utm_* OR ad.utm_* is null) 
+-- can be a simple equality. Using (ad.utm_* = session.utm_* OR ad.utm_* is null)
 -- results in an ugly nested-loop join and kills performance
 
 with sessions as (

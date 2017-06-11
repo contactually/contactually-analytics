@@ -3,7 +3,8 @@
 {{ config(
     materialized='table',
     sort=['id'],
-    dist='service'
+    dist='service',
+    enabled=FALSE
   )
 }}
 
