@@ -1,7 +1,7 @@
 {{ config(
 materialized='table',
 sort=['date'],
-dist='service'
+dist='service',
 enabled=FALSE
 )
 }}
