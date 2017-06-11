@@ -4,7 +4,7 @@
     materialized='table',
     sort=['id'],
     dist='service',
-    enabled='False'
+    enabled=False
   )
 }}
 
