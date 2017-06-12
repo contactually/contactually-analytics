@@ -26,20 +26,9 @@ models:
 
     snowplow:
       base:
-        materialized: ephemeral
-        base_events:
-          materialized: view
-        user_session_events:
-          materialized: table
+        materialized: table
       transform:
-        pre_trial_attribution:
-          materialized: table
-        pre_trial_sessions_with_mappings:
-          materialized: table
-        pre_customer_attribution:
-          materialized: table
-        pre_customer_sessions_with_mappings:
-          materialized: table
+        materialized: table
 
     finance:
       tables:
