@@ -59,11 +59,9 @@ models:
     tables:
       materialized: table
       quickbooks_parent_class_map:
-        enabled: true
     base:
       quickbooks_classes:
         materialized: table
-        enabled: true
     transform:
       quickbooks_toplevel_account_metrics:
         materialized: table
@@ -93,27 +91,9 @@ models:
       "base.vendors"                      : "quickbooks.quickbooks_vendors"
       "level_0_id_field"                  : "_sdc_level_0_id"
       "source_key_id_field"               : "_sdc_source_key_id"
-      "uses_classes"                       : "true"
-
-  facebook_ads:
-    materialized: ephemeral
-    stitch:
-      transform:
-        fb_ad_insights_xf:
-          materialized: view
-    vars:
-      ad_creatives_table                  : '{{ ref("input_facebook_stitch") }}'
-      ads_insights_table                  : 'facebook_contactually_ads.facebook_ads_insights_26288427'
-      ads_table                           : 'facebook_contactually_ads.facebook_ads_26288427'
-      ads_insights_agegender_table        : 'facebook_contactually_ads.facebook_ads_insights_age_and_gender_26288427'
-      ads_insights_country_table          : 'facebook_contactually_ads.facebook_ads_insights_country_26288427'
-      ads_insights_placement_device_table : 'facebook_contactually_ads.facebook_ads_insights_placement_and_device_26288427'
-      campaigns_table                     : 'facebook_contactually_ads.facebook_campaigns_26288427'
-
+      "uses_classes"                      : "true"
 
 profile: "contactually"
 
 repositories:
-  - "https://github.com/fishtown-analytics/snowplow.git@0.2.0"
   - "https://github.com/fishtown-analytics/quickbooks.git@v0.1.0"
-  - "https://github.com/fishtown-analytics/facebook-ads@v0.1.6"

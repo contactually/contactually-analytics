@@ -127,11 +127,21 @@ select
   campaign_id,
   url,
   base_url,
-  replace(replace(replace(lower(nullif(trim(utm_source), '')), '%20', ' '), '+', ' '), '%7c', '|') as utm_source,
-  replace(replace(replace(lower(nullif(trim(utm_medium), '')), '%20', ' '), '+', ' '), '%7c', '|') as utm_medium,
-  replace(replace(replace(lower(nullif(trim(utm_campaign), '')), '%20', ' '), '+', ' '), '%7c', '|') as utm_campaign,
-  replace(replace(replace(lower(nullif(trim(utm_content), '')), '%20', ' '), '+', ' '), '%7c', '|') as utm_content,
-  replace(replace(replace(lower(nullif(trim(utm_term), '')), '%20', ' '), '+', ' '), '%7c', '|') as utm_term,
+  lower(case when service = 'adwords'
+    then replace(replace(replace(lower(nullif(trim(utm_source), '')), '%20', ' '), '+', ' '), '%7c', '|')
+    else utm_source end) as utm_source,
+  lower(case when service = 'adwords'
+    then replace(replace(replace(lower(nullif(trim(utm_medium), '')), '%20', ' '), '+', ' '), '%7c', '|')
+    else utm_medium end) as utm_medium,
+  lower(case when service = 'adwords'
+    then replace(replace(replace(lower(nullif(trim(utm_campaign), '')), '%20', ' '), '+', ' '), '%7c', '|')
+    else utm_campaign end) as utm_campaign,
+  lower(case when service = 'adwords'
+    then replace(replace(replace(lower(nullif(trim(utm_content), '')), '%20', ' '), '+', ' '), '%7c', '|')
+    else utm_content end) as utm_content,
+  lower(case when service = 'adwords'
+    then replace(replace(replace(lower(nullif(trim(utm_term), '')), '%20', ' '), '+', ' '), '%7c', '|')
+    else utm_term end) as utm_term,
   impressions,
   clicks,
   cost

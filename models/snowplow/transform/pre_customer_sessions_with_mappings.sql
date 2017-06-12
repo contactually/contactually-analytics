@@ -1,18 +1,18 @@
+{{ config(
+materialized='table',
+sort=['first_touch_date', 'last_touch_date'],
+dist='blended_user_id'
+)
+}}
+
 with pre_customer_attribution as (
     select *
     from {{ ref('pre_customer_attribution') }}
 ),
     smc_mapping as (
-      select distinct
-        map.in_source,
-        map.in_medium,
-        map.in_campaign,
-        map.out_channel,
-        map.out_source,
-        map.out_medium,
-        map.out_campaign,
-        map.smc_key
-      from fivetran_uploads.snowplow_mapping map
+      select
+        *
+      from {{ ref('smc_mapping') }}
   ),
     snowplow_sessions_with_key as (
       select distinct
@@ -50,6 +50,7 @@ with pre_customer_attribution as (
       from pre_customer_attribution
   )
 select distinct
+  md5(sp_sessions.blended_user_id + sp_sessions.first_touch_date) as session_id,
   sp_sessions.blended_user_id,
   sp_sessions.first_touch_date,
   sp_sessions.last_touch_date,
@@ -89,6 +90,6 @@ select distinct
   sp_sessions.middle_touch_landing_pages
 from snowplow_sessions_with_key sp_sessions
   left join smc_mapping first_touch_mapping
-    on sp_sessions.first_touch_smc_key = lower(first_touch_mapping.smc_key)
+    on sp_sessions.first_touch_smc_key = first_touch_mapping.smc_key
   left join smc_mapping last_touch_mapping
-    on sp_sessions.last_touch_smc_key = lower(last_touch_mapping.smc_key)
+    on sp_sessions.last_touch_smc_key = last_touch_mapping.smc_key

@@ -1,3 +1,10 @@
+{{ config(
+materialized='table',
+sort=['first_touch_date', 'last_touch_date'],
+dist='blended_user_id'
+)
+}}
+
 with user_session_events as (
   select * from {{ ref('user_session_events') }}
 ),

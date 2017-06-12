@@ -1,3 +1,10 @@
+{{ config(
+materialized='table',
+sort=['session_start'],
+dist='blended_user_id'
+)
+}}
+
 with snowplow_user_id_map as
 (select distinct
    events.user_id,
