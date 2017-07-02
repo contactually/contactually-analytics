@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b9b8cc1f-8439-4631-9817-3f0c20fe2239" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbt_project.yml" afterPath="$PROJECT_DIR$/dbt_project.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,11 +17,21 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="dbt_project.yml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dbt_project.yml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dbt_project.yml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="303">
               <caret line="72" column="81" lean-forward="false" selection-start-line="72" selection-start-column="81" selection-end-line="72" selection-end-column="81" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="5" lean-forward="false" selection-start-line="5" selection-start-column="5" selection-end-line="5" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -47,6 +57,7 @@
       <list>
         <option value="$PROJECT_DIR$/models/finance/base/quickbooks_invoices_stitched.sql" />
         <option value="$PROJECT_DIR$/dbt_project.yml" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -291,12 +302,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1499015091750</updated>
-      <workItem from="1499015093091" duration="109000" />
+      <workItem from="1499015093091" duration="154000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="109000" />
+    <option name="totallyTimeSpent" value="154000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="58" y="23" width="1212" height="757" extended-state="0" />
@@ -344,6 +355,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="303">
           <caret line="72" column="81" lean-forward="false" selection-start-line="72" selection-start-column="81" selection-end-line="72" selection-end-column="81" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="5" lean-forward="false" selection-start-line="5" selection-start-column="5" selection-end-line="5" selection-end-column="5" />
           <folding />
         </state>
       </provider>
