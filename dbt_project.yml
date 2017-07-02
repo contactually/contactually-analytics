@@ -70,7 +70,7 @@ models:
       "base.deposits_line_linkedtxn"      : "quickbooks.quickbooks_deposits__line__linkedtxn"
       "base.deposits"                     : "quickbooks.quickbooks_deposits"
       "base.invoices_lines"               : "quickbooks.quickbooks_invoices__line"
-      "base.invoices"                     : "quickbooks.quickbooks_invoices"
+      "base.invoices"                     : '{{ ref("quickbooks_invoices_stitched") }}'
       "base.items"                        : "quickbooks.quickbooks_items"
       "base.journal_entries"              : '{{ ref("quickbooks_journalentries_non_deleted") }}'
       "base.journal_entries_line"         : "quickbooks.quickbooks_journalentries__line"
