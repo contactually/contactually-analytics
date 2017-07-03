@@ -1,7 +1,7 @@
 select
     id::int,
     totalamt,
-    txndate::date as txn_date,
+    txndate::date as txndate,
     duedate::date as due_date,
     balance,
     null as delivery_type,
