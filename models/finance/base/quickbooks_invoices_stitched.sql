@@ -1,6 +1,6 @@
 select
     id::int,
-    totalamt as total_amt,
+    totalamt,
     txndate::date as txn_date,
     duedate::date as due_date,
     balance,
