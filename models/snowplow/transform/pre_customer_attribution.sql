@@ -39,7 +39,7 @@ with user_session_events as (
        from
          user_session_events events
        where events.pre_customer_session_flag = 1
-       group by 1,2)
+       group by 1,2)page_views
    group by 1
   )
 select distinct
@@ -50,7 +50,7 @@ select distinct
   totals.time_on_site_in_s,
   totals.page_view_count,
   /********FIRST TOUCH********/
-  first_touch.collector_tstamp as first_touch_date,
+  first_touch.dvce_tstamp as first_touch_date,
   case when first_touch.mkt_medium is not null
     then first_touch.mkt_medium
   else first_touch.refr_medium
@@ -63,7 +63,7 @@ select distinct
   first_touch.referer_url as first_touch_in_referer,
   first_touch.page_url as first_touch_landing_page,
   /********LAST TOUCH********/
-  last_touch.collector_tstamp as last_touch_date,
+  last_touch.dvce_tstamp as last_touch_date,
   case when last_touch.mkt_medium is not null
     then last_touch.mkt_medium
   else last_touch.refr_medium
