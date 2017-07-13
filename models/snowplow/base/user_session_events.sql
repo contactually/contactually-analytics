@@ -30,7 +30,7 @@ with snowplow_user_id_map as
         else events.domain_userid
         end as blended_user_id,
         map.created_at as user_created_at,
-        case when map.user_id is null or session_start < map.created_at
+        case when map.user_id is null or (session_start - '120 seconds'::INTERVAL) < map.created_at
           then 1
         else 0
         end as pre_trial_session_flag,
@@ -43,23 +43,23 @@ with snowplow_user_id_map as
         events.domain_sessionidx,
         session_times.session_start,
         session_times.session_end,
-        coalesce( datediff( second,lag( events.dvce_tstamp,1 )
+        coalesce( datediff( second,lag( events.collector_tstamp,1 )
         over (
           partition by events.domain_userid,events.domain_sessionidx
-          order by events.dvce_tstamp ),events.dvce_tstamp ),0 ) as event_duration_in_s,
+          order by events.collector_tstamp ),events.collector_tstamp ),0 ) as event_duration_in_s,
         events.event_id,
         row_number( )
         over (
           partition by case when map.user_id is not null
             then map.user_id
                        else events.domain_userid end
-          order by events.dvce_tstamp ) as user_event_index,
+          order by events.collector_tstamp ) as user_event_index,
         row_number( )
         over (
           partition by case when map.user_id is not null
             then map.user_id
                        else events.domain_userid end,events.domain_sessionid
-          order by events.dvce_tstamp ) as session_event_index,
+          order by events.collector_tstamp ) as session_event_index,
         events.collector_tstamp,
         events.dvce_tstamp,
         events.event,
@@ -93,8 +93,8 @@ with snowplow_user_id_map as
           select
             events.domain_userid,
             events.domain_sessionidx,
-            min( events.dvce_tstamp ) as session_start,
-            max( events.dvce_tstamp ) as session_end
+            min( events.collector_tstamp ) as session_start,
+            max( events.collector_tstamp ) as session_end
           from
             snowplow.event events
           where events.event in ('pp','pv')
@@ -105,8 +105,8 @@ with snowplow_user_id_map as
         left join snowplow_user_id_map map
           on events.domain_userid = map.domain_userid
       where events.event in ('pp','pv')
-            and events.dvce_tstamp >= '2017-01-01'
-      order by events.dvce_tstamp
+            and events.collector_tstamp >= '2017-01-01'
+      order by events.collector_tstamp
   ),
     calculated_session_idx as (
       select
