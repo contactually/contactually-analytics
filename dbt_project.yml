@@ -26,9 +26,37 @@ models:
 
     snowplow:
       base:
-        materialized: table
+        smc_mapping:
+          materialized: table
+          sort: ['smc_key']
+          dist: 'smc_key'
+        snowplow_base_events:
+          materialized: incremental
+          sort: ['blended_user_id','session_start']
+          dist: 'blended_user_id'
+          sql_where: 'True'
+          unique_key: 'domain_userid || event_id'
+        snowplow_base_with_session_index:
+          materialized: ephemeral
+        user_session_events:
+          enabled: false
       transform:
-        materialized: table
+        pre_customer_attribution:
+          materialized: table
+          sort: ['first_touch_date', 'last_touch_date']
+          dist: 'blended_user_id'
+        pre_trial_attribution:
+          materialized: table
+          sort: ['first_touch_date', 'last_touch_date']
+          dist: 'blended_user_id'
+        pre_customer_sessions_with_mappings:
+          materialized: table
+          sort: ['first_touch_date', 'last_touch_date']
+          dist: 'blended_user_id'
+        pre_trial_sessions_with_mappings:
+          materialized: table
+          sort: ['first_touch_date', 'last_touch_date']
+          dist: 'blended_user_id'
 
     finance:
       tables:

@@ -115,12 +115,15 @@ with snowplow_user_id_map as
         sessions.session_start,
         row_number() over (partition by blended_user_id order by session_start) as session_index
       from
-        (select distinct
-           blended_user_id,
-           domain_sessionid,
-           session_start
-         from
-           unranked_sessions) sessions)
+        (
+        select distinct
+          blended_user_id,
+          domain_sessionid,
+          session_start
+        from
+        unranked_sessions
+        )sessions
+  )
 select
   unranked_sessions.domain_userid,
   unranked_sessions.user_id,

@@ -1,9 +1,3 @@
-{{ config(
-materialized='table',
-sort=['smc_key'],
-dist='smc_key')
-}}
-
 select distinct
   lower(map.in_source) as in_source,
   lower(map.in_medium) as in_medium,
