@@ -69,11 +69,11 @@ select distinct
   last_touch.referer_url as last_touch_in_referer,
   last_touch.page_url as last_touch_landing_page,
   /********MIDDLE TOUCH********/
-  listagg(middle_touch.mkt_medium, ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_mediums,
-  listagg(middle_touch.mkt_source, ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_sources,
-  listagg(middle_touch.mkt_campaign, ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_campaigns,
-  listagg(middle_touch.referer_url, ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_referers,
-  listagg(middle_touch.page_url, ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_landing_pages
+  listagg(left(middle_touch.mkt_medium,255), ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_mediums,
+  listagg(left(middle_touch.mkt_source,255), ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_sources,
+  listagg(left(middle_touch.mkt_campaign,255), ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_campaigns,
+  listagg(left(middle_touch.referer_url,255), ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_referers,
+  listagg(left(middle_touch.page_url,255), ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_landing_pages
 from (
   select distinct blended_user_id
   from user_session_events
