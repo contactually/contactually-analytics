@@ -103,6 +103,3 @@ from snowplow.event events
     on events.domain_userid = map.domain_userid
 where events.event in ('pp','pv')
       and events.collector_tstamp >= '2017-01-01'
-{% if adapter.already_exists(this.schema, this.table) and not flags.FULL_REFRESH %}
-and events.collector_tstamp >= (select max(collector_tstamp) from {{this}})
-{% endif %}

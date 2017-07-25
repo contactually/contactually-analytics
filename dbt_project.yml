@@ -31,11 +31,9 @@ models:
           sort: ['smc_key']
           dist: 'smc_key'
         snowplow_base_events:
-          materialized: incremental
+          materialized: table
           sort: ['blended_user_id','session_start']
           dist: 'blended_user_id'
-          sql_where: 'True'
-          unique_key: 'domain_userid || event_id'
         snowplow_base_with_session_index:
           materialized: ephemeral
         user_session_events:
