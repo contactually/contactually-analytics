@@ -73,7 +73,8 @@ select distinct
   sp_sessions.middle_touch_mediums,
   sp_sessions.middle_touch_campaigns,
   sp_sessions.middle_touch_referers,
-  sp_sessions.middle_touch_landing_pages
+  sp_sessions.middle_touch_landing_pages,
+  case when sp_sessions.first_touch_date = sp_sessions.last_touch_date then 1 else 2 end + case when sp_sessions.middle_touch_sources is not null then regexp_count(sp_sessions.middle_touch_sources,',') + 1 else 0 end as touch_count
 from snowplow_sessions_with_key sp_sessions
 left join smc_mapping first_touch_mapping
   on sp_sessions.first_touch_smc_key = first_touch_mapping.smc_key
