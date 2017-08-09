@@ -71,9 +71,9 @@ select distinct
   /********MIDDLE TOUCH********/
   listagg(left(middle_touch.mkt_medium,100), ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_mediums,
   listagg(left(middle_touch.mkt_source,100), ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_sources,
-  listagg(left(middle_touch.mkt_campaign,100), ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_campaigns,
+  listagg(left(middle_touch.mkt_campaign,100), ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_campaigns/*,
   listagg(left(middle_touch.referer_url,100), ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_referers,
-  listagg(left(middle_touch.page_url,100), ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_landing_pages
+  listagg(left(middle_touch.page_url,100), ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_landing_pages*/
 from (
   select distinct blended_user_id
   from user_session_events

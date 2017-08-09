@@ -29,8 +29,8 @@ snowplow_sessions_with_key as (
     pre_trial_attribution.middle_touch_sources,
     pre_trial_attribution.middle_touch_mediums,
     pre_trial_attribution.middle_touch_campaigns,
-    pre_trial_attribution.middle_touch_referers,
-    pre_trial_attribution.middle_touch_landing_pages,
+    --pre_trial_attribution.middle_touch_referers,
+    --pre_trial_attribution.middle_touch_landing_pages,
     case when pre_trial_attribution.first_touch_in_source is not null or pre_trial_attribution.first_touch_in_medium is not null or pre_trial_attribution.first_touch_in_campaign is not null or pre_trial_attribution.first_touch_in_referer is not null
       then lower(nvl( pre_trial_attribution.first_touch_in_source,'' ) || nvl( pre_trial_attribution.first_touch_in_medium,'' ) || nvl( pre_trial_attribution.first_touch_in_campaign,'') || nvl( pre_trial_attribution.first_touch_in_referer,''))
     else null
@@ -63,17 +63,23 @@ select distinct
   first_touch_mapping.out_source as first_touch_out_source,
   first_touch_mapping.out_medium as first_touch_out_medium,
   first_touch_mapping.out_campaign as first_touch_out_campaign,
+  first_touch_mapping.out_referring_domain as first_touch_out_referring_domain,
+  first_touch_mapping.out_intent as first_touch_out_intent,
+  first_touch_mapping.out_clicktype as first_touch_out_clicktype,
   sp_sessions.first_touch_landing_page,
   nvl(last_touch_mapping.out_channel, case when sp_sessions.last_touch_smc_key is null then 'direct' end) as last_touch_out_channel,
   last_touch_mapping.out_source as last_touch_out_source,
   last_touch_mapping.out_medium as last_touch_out_medium,
   last_touch_mapping.out_campaign as last_touch_out_campaign,
+  last_touch_mapping.out_referring_domain as last_touch_out_referring_domain,
+  last_touch_mapping.out_intent as last_touch_out_intent,
+  last_touch_mapping.out_clicktype as last_touch_out_clicktype,
   sp_sessions.last_touch_landing_page,
   sp_sessions.middle_touch_sources,
   sp_sessions.middle_touch_mediums,
   sp_sessions.middle_touch_campaigns,
-  sp_sessions.middle_touch_referers,
-  sp_sessions.middle_touch_landing_pages,
+  /*sp_sessions.middle_touch_referers,
+  sp_sessions.middle_touch_landing_pages,*/
   case when sp_sessions.first_touch_date = sp_sessions.last_touch_date then 1 else 2 end + case when sp_sessions.middle_touch_sources is not null then regexp_count(sp_sessions.middle_touch_sources,',') + 1 else 0 end as touch_count
 from snowplow_sessions_with_key sp_sessions
 left join smc_mapping first_touch_mapping
