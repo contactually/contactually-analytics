@@ -11,3 +11,4 @@ select
   null as metadata__createtime,
   null as metadata__lastupdatedtime
 from quickbooks.purchase
+where not deleted

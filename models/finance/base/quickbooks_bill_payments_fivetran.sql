@@ -8,3 +8,4 @@ select
   null as metadata__createtime,
   null as metadata__lastupdatedtime
 from quickbooks.bill_payment
+where not deleted
