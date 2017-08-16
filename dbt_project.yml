@@ -84,28 +84,28 @@ models:
         materialized: table
 
     vars:
-      "base.accounts"                     : "quickbooks.quickbooks_accounts"
-      "base.bills_line"                   : "quickbooks.quickbooks_bills__line"
-      "base.billpayments"                 : "quickbooks.quickbooks_billpayments"
-      "base.billpayments_line"            : "quickbooks.quickbooks_billpayments__line"
-      "base.billpayments_line__linkedtxn" : "quickbooks.quickbooks_billpayments__line__linkedtxn"
-      "base.bills"                        : '{{ ref("quickbooks_bills_non_deleted") }}'
-      "base.classes"                      : "quickbooks.quickbooks_classes"
-      "base.customers"                    : "quickbooks.quickbooks_customers"
-      "base.deposits_line"                : "quickbooks.quickbooks_deposits__line"
-      "base.deposits_line_linkedtxn"      : "quickbooks.quickbooks_deposits__line__linkedtxn"
-      "base.deposits"                     : "quickbooks.quickbooks_deposits"
-      "base.invoices_lines"               : "quickbooks.quickbooks_invoices__line"
-      "base.invoices"                     : '{{ ref("quickbooks_invoices_stitched") }}'
-      "base.items"                        : "quickbooks.quickbooks_items"
-      "base.journal_entries"              : '{{ ref("quickbooks_journalentries_non_deleted") }}'
-      "base.journal_entries_line"         : "quickbooks.quickbooks_journalentries__line"
-      "base.payments"                     : "quickbooks.quickbooks_payments"
-      "base.purchases_line"               : "quickbooks.quickbooks_purchases__line"
-      "base.purchases"                    : "quickbooks.quickbooks_purchases"
-      "base.vendors"                      : "quickbooks.quickbooks_vendors"
-      "level_0_id_field"                  : "_sdc_level_0_id"
-      "source_key_id_field"               : "_sdc_source_key_id"
+      "base.accounts"                     : '{{ ref("quickbooks_accounts_fivetran") }}'
+      "base.bills_line"                   : '{{ ref("quickbooks_bill_lines_fivetran") }}'
+      "base.billpayments"                 : '{{ ref("quickbooks_bill_payments_fivetran") }}'
+      "base.billpayments_line"            : '{{ ref("quickbooks_bill_payments_line_fivetran") }}'
+      "base.billpayments_line__linkedtxn" : '{{ ref("quickbooks_bill_payments_line_transaction_fivetran") }}'
+      "base.bills"                        : '{{ ref("quickbooks_bills_fivetran") }}'
+      "base.classes"                      : '{{ ref("quickbooks_classes_fivetran") }}'
+      "base.customers"                    : '{{ ref("quickbooks_customers_fivetran") }}'
+      "base.deposits_line"                : '{{ ref("quickbooks_deposit_lines_fivetran") }}'
+      "base.deposits_line_linkedtxn"      : '{{ ref("quickbooks_deposit_line_transactions_fivetran") }}'
+      "base.deposits"                     : '{{ ref("quickbooks_deposits_fivetran") }}'
+      "base.invoices_lines"               : '{{ ref("quickbooks_invoice_lines_fivetran") }}'
+      "base.invoices"                     : '{{ ref("quickbooks_invoices_fivetran") }}'
+      "base.items"                        : '{{ ref("quickbooks_items_fivetran") }}'
+      "base.journal_entries"              : '{{ ref("quickbooks_journal_entries_fivetran") }}'
+      "base.journal_entries_line"         : '{{ ref("quickbooks_journal_entry_lines_fivetran") }}'
+      "base.payments"                     : '{{ ref("quickbooks_payments_fivetran") }}'
+      "base.purchases_line"               : '{{ ref("quickbooks_purchase_lines_fivetran") }}'
+      "base.purchases"                    : '{{ ref("quickbooks_purchases_fivetran") }}'
+      "base.vendors"                      : '{{ ref("quickbooks_vendors_fivetran") }}'
+      "level_0_id_field"                  : "level_id"
+      "source_key_id_field"               : "source_key"
       "uses_classes"                      : "true"
 
 profile: "contactually"
