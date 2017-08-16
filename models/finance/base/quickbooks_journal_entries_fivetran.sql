@@ -4,4 +4,4 @@ select
   adjustment,
   null as metadata__createtime,
   null as metadata__lastupdatedtime
-from quickbooks_fivetran.journal_entry
+from quickbooks.journal_entry

@@ -5,4 +5,4 @@ select
   account as deposittoaccountref__value,
   null as metadata__createtime,
   null as metadata__lastupdatedtime
-from quickbooks_fivetran.deposit
+from quickbooks.deposit

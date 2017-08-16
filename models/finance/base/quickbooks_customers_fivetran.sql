@@ -5,4 +5,4 @@ select
   balance,
   null as metadata__createtime,
   null as metadata__lastupdatedtime
-from quickbooks_fivetran.customer
+from quickbooks.customer

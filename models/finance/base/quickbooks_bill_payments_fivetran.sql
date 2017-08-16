@@ -7,4 +7,4 @@ select
   bank_account as checkpayment__bankaccountref__value,
   null as metadata__createtime,
   null as metadata__lastupdatedtime
-from quickbooks_fivetran.bill_payment
+from quickbooks.bill_payment

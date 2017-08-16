@@ -9,4 +9,4 @@ select
   payment_method as paymentmethodref__value,
   null as metadata__createtime,
   null as metadata__lastupdatedtime
-from quickbooks_fivetran.payment
+from quickbooks.payment
