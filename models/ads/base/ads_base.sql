@@ -66,7 +66,7 @@ with versions as (
   ),
     facebooks_ads as (
       select
-        insights.date_start :: DATE as date_day,
+        insights.date :: DATE as date_day,
         insights.campaign_id,
         creatives.url,
         creatives.base_url,
@@ -78,11 +78,11 @@ with versions as (
         insights.impressions,
         insights.clicks,
         insights.spend as cost
-      from facebook_contactually_ads.facebook_ads_insights_26288427 insights
+      from facebook_ads.insight insights
         left join ads
           on insights.ad_id = ads.id
-             and insights.date_start :: DATE >= date_trunc( 'day',ads.effective_from ) :: DATE
-             and (insights.date_start :: DATE < date_trunc( 'day',ads.effective_to ) :: DATE or ads.effective_to is null)
+             and insights.date :: DATE >= date_trunc( 'day',ads.effective_from ) :: DATE
+             and (insights.date :: DATE < date_trunc( 'day',ads.effective_to ) :: DATE or ads.effective_to is null)
         left join creatives
           on ads.creative_id = creatives.id
   ),

@@ -13,14 +13,7 @@ data-paths: ["data"]
 models:
   post-hook: "grant select on table {{this}} to looker"
   Contactually:
-    app:
-      base:
-        materialized: ephemeral
     ads:
-      base:
-        materialized: ephemeral
-
-    salesforce:
       base:
         materialized: ephemeral
 
@@ -61,12 +54,6 @@ models:
         materialized: table
         sort: txn_date
         dist: txn_date
-
-  Snowplow:
-    post-hook: "grant select on table {{this}} to looker"
-    vars:
-      events_table: "{{ ref('base_events') }}"
-      country_codes_table: '{{ this.schema }}.country_codes'
 
   quickbooks:
     post-hook: "grant select on table {{this}} to looker"
