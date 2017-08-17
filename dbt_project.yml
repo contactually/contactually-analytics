@@ -105,7 +105,6 @@ models:
       "base.vendors"                      : '{{ ref("quickbooks_vendors_fivetran") }}'
       "level_0_id_field"                  : "level_id"
       "source_key_id_field"               : "source_key"
-      "uses_classes"                      : "true"
 
 profile: "contactually"
 
