@@ -1,10 +1,3 @@
-{{ config(
-materialized='table',
-sort=['date'],
-dist='service'
-)
-}}
-
 with versions as (
     select
       *,

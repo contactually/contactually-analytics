@@ -15,7 +15,19 @@ models:
   Contactually:
     ads:
       base:
-        materialized: ephemeral
+        ads_base:
+          materialized: table
+          sort: ['date']
+          dist: 'campaign_id'
+        ads_base_with_mappings:
+          materialized: table
+          sort: ['date']
+          dist: 'campaign_id'
+      transform:
+        ads_sessions_join:
+          materialized: table
+          sort: ['session_id', 'ad_id']
+          dist: 'session_id'
 
     snowplow:
       base:

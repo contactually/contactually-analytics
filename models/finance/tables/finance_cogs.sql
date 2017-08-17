@@ -1,4 +1,3 @@
-
 with cogs_classes as (
 
     select * from {{ ref('quickbooks_parent_class_map') }}

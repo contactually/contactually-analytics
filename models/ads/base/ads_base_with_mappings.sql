@@ -1,9 +1,3 @@
-{{ config(
-materialized='table',
-sort=['date'],
-dist='service')
-}}
-
 with smc_mapping as (
     select
       *

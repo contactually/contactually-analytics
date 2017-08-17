@@ -1,10 +1,3 @@
-{{ config(
-materialized='table',
-sort=['session_id', 'ad_id'],
-dist='session_id'
-)
-}}
-
 with user_info as (
     select
       users.id,
