@@ -41,7 +41,8 @@ select
   sp_base_events.mkt_medium,
   sp_base_events.mkt_source,
   sp_base_events.mkt_term,
-  sp_base_events.app_id
+  sp_base_events.app_id,
+  website_redesign.se_label as website_version_seen
 from analytics.snowplow_base_events sp_base_events
 inner join
   (
@@ -62,3 +63,19 @@ inner join
   )calculated_session_idx
   on sp_base_events.blended_user_id = calculated_session_idx.blended_user_id
   and sp_base_events.domain_sessionid = calculated_session_idx.domain_sessionid
+left join
+  (
+    select distinct
+      event.domain_userid,
+      event.domain_sessionid,
+      event.se_action,
+      event.se_category,
+      event.se_label
+    from snowplow.event event
+    where event.se_category = 'ab_testing'
+          and event.se_action = 'website_redesign'
+          and event.event = 'se'
+          and event.se_label is not null
+  )website_redesign
+    on website_redesign.domain_userid = sp_base_events.domain_userid
+    and website_redesign.domain_sessionid = sp_base_events.domain_sessionid

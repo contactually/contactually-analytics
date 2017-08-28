@@ -55,6 +55,7 @@ select distinct
   first_touch.mkt_campaign as first_touch_in_campaign,
   first_touch.referer_url as first_touch_in_referer,
   first_touch.page_url as first_touch_landing_page,
+  first_touch.website_version_seen as first_touch_website_version_seen,
   /********LAST TOUCH********/
   last_touch.collector_tstamp as last_touch_date,
   case when last_touch.mkt_medium is not null
@@ -68,6 +69,7 @@ select distinct
   last_touch.mkt_campaign as last_touch_in_campaign,
   last_touch.referer_url as last_touch_in_referer,
   last_touch.page_url as last_touch_landing_page,
+  last_touch.website_version_seen as last_touch_website_version_seen,
   /********MIDDLE TOUCH********/
   listagg(left(middle_touch.mkt_medium,100), ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_mediums,
   listagg(left(middle_touch.mkt_source,100), ',') within group (order by middle_touch.domain_sessionidx) as middle_touch_sources,
@@ -98,4 +100,4 @@ left join user_session_events middle_touch
   and middle_touch.pre_customer_session_flag = 1
 inner join pre_customer_session_totals totals
   on totals.blended_user_id = indexes.blended_user_id
-group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
+group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
