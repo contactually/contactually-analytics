@@ -83,7 +83,8 @@ select
   events.mkt_medium,
   events.mkt_source,
   events.mkt_term,
-  events.app_id
+  events.app_id,
+  website_redesign.website_version_seen
 from snowplow.event events
   inner join
   (
@@ -101,5 +102,18 @@ from snowplow.event events
        and events.domain_sessionidx = session_times.domain_sessionidx
   left join snowplow_user_id_map map
     on events.domain_userid = map.domain_userid
+  left join
+  (
+    select
+      event.domain_userid,
+      max(event.se_label) as website_version_seen
+    from snowplow.event event
+    where event.se_category = 'ab_testing'
+          and event.se_action = 'website_redesign'
+          and event.event = 'se'
+          and event.se_label is not null
+    group by 1
+  )website_redesign
+    on website_redesign.domain_userid = events.domain_userid
 where events.event in ('pp','pv')
       and events.collector_tstamp >= '2017-01-01'
