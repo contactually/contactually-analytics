@@ -34,7 +34,7 @@ models:
         smc_mapping:
           materialized: table
           sort: ['smc_key']
-          dist: 'smc_key'
+          dist: 'in_campaign'
         snowplow_base_events:
           materialized: table
           sort: ['blended_user_id','session_start']
@@ -46,19 +46,19 @@ models:
       transform:
         pre_customer_attribution:
           materialized: table
-          sort: ['first_touch_date', 'last_touch_date']
+          sort: ['blended_user_id', 'first_touch_date']
           dist: 'blended_user_id'
         pre_trial_attribution:
           materialized: table
-          sort: ['first_touch_date', 'last_touch_date']
+          sort: ['blended_user_id', 'first_touch_date']
           dist: 'blended_user_id'
         pre_customer_sessions_with_mappings:
           materialized: table
-          sort: ['first_touch_date', 'last_touch_date']
+          sort: ['blended_user_id', 'first_touch_date']
           dist: 'blended_user_id'
         pre_trial_sessions_with_mappings:
           materialized: table
-          sort: ['first_touch_date', 'last_touch_date']
+          sort: ['blended_user_id', 'first_touch_date']
           dist: 'blended_user_id'
 
     finance:
