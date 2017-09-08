@@ -9,5 +9,6 @@ select distinct
   lower(map.out_campaign) as out_campaign,
   lower(map.out_referring_domain) as out_referring_domain,
   lower(map.out_intent) as out_intent,
-  lower(map.out_clicktype) as out_clicktype
+  lower(map.out_clicktype) as out_clicktype,
+  lower(map.out_intent_macro) as out_intent_macro
 from fivetran_uploads.snowplow_mapping map
