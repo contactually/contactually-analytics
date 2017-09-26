@@ -32,14 +32,10 @@ snowplow_sessions_with_key as (
     pre_customer_attribution.middle_touch_campaigns,
     --pre_customer_attribution.middle_touch_referers,
     --pre_customer_attribution.middle_touch_landing_pages,
-    case when pre_customer_attribution.first_touch_in_source is not null or pre_customer_attribution.first_touch_in_medium is not null or pre_customer_attribution.first_touch_in_campaign is not null or pre_customer_attribution.first_touch_in_referer is not null
-      then lower(nvl( pre_customer_attribution.first_touch_in_source,'' ) || nvl( pre_customer_attribution.first_touch_in_medium,'' ) || nvl( pre_customer_attribution.first_touch_in_campaign,'') || nvl( pre_customer_attribution.first_touch_in_referer,''))
-    else null
-    end as first_touch_smc_key,
-    case when pre_customer_attribution.last_touch_in_source is not null or pre_customer_attribution.last_touch_in_medium is not null or pre_customer_attribution.last_touch_in_campaign is not null
-      then lower(nvl(pre_customer_attribution.last_touch_in_source, '') || nvl(pre_customer_attribution.last_touch_in_medium, '') || nvl(pre_customer_attribution.last_touch_in_campaign, ''))
-    else null
-    end as last_touch_smc_key
+    lower(nvl( pre_customer_attribution.first_touch_in_source,'' ) || nvl( pre_customer_attribution.first_touch_in_medium,'' ) || nvl( pre_customer_attribution.first_touch_in_campaign,'')
+          || nvl( pre_customer_attribution.first_touch_in_referer,'') || nvl( pre_customer_attribution.first_touch_landing_page,'')) as first_touch_smc_key,
+    lower(nvl(pre_customer_attribution.last_touch_in_source, '') || nvl(pre_customer_attribution.last_touch_in_medium, '') || nvl(pre_customer_attribution.last_touch_in_campaign, '')
+          || nvl( pre_customer_attribution.last_touch_in_referer,'') || nvl(pre_customer_attribution.last_touch_landing_page, '')) as last_touch_smc_key
   from pre_customer_attribution
 )
 select distinct
