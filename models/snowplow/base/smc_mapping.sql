@@ -1,4 +1,4 @@
-select
+select distinct
   lower(map.smc_key) as smc_key,
   lower(map.in_source) as in_source,
   lower(map.in_medium) as in_medium,
