@@ -79,5 +79,5 @@ from postgres_public.stats_user_events as sue
   inner join u
     on u.id = sue.user_id
 {% if adapter.already_exists(this.schema, this.table) and not flags.FULL_REFRESH %}
-  where sue.id > (select max(id) from {{ this }})
+  where sue.id not in (select id from {{ this }})
 {% endif %}
