@@ -9,11 +9,11 @@ with snowplow_user_id_map as
       payment_accounts.first_charged_at,
       events.domain_userid
     from snowplow.event events
-      left join postgres_public.users users
+      left join postgres_public_production_main_public.users users
         on events.user_id = users.id
-      left join postgres_public.teams teams
+      left join postgres_public_production_main_public.teams teams
         on users.team_id = teams.id
-      left join postgres_public.payment_accounts payment_accounts
+      left join postgres_public_production_main_public.payment_accounts payment_accounts
         on teams.payment_account_id = payment_accounts.id
     where events.event not in ('pp','pv')
           and events.user_id is not null

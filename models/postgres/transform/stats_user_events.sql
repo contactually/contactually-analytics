@@ -73,7 +73,7 @@ select sue.id,
   json_extract_path_text( extra_data, 'quantity_rejected') as quantity_rejected,
   json_extract_path_text( extra_data, 'contact_program_id') as contact_program_id,
   json_extract_path_text( extra_data, 'contacts_count') as contacts_count
-from postgres_public.stats_user_events as sue
+from postgres_public_production_main_public.stats_user_events as sue
   left join event_type_enum as ete
     on ete.enum = sue.event_type
   inner join u

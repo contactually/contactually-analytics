@@ -9,10 +9,10 @@ with user_info as (
         then 1
       else 0
       end as paying_flag
-    from postgres_public.users users
-      inner join postgres_public.teams teams
+    from postgres_public_production_main_public.users users
+      inner join postgres_public_production_main_public.teams teams
         on users.team_id = teams.id
-      left join postgres_public.payment_accounts payment_accounts
+      left join postgres_public_production_main_public.payment_accounts payment_accounts
         on teams.payment_account_id = payment_accounts.id
 ),
     sessions_stats as (
