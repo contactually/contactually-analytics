@@ -14,18 +14,20 @@ models:
   post-hook: "grant select on table {{this}} to looker"
   Contactually:
     ads:
-    enabled: false
       base:
         ads_base:
+          enabled: false
           materialized: table
           sort: ['date']
           dist: 'campaign_id'
         ads_base_with_mappings:
+          enabled: false
           materialized: table
           sort: ['date']
           dist: 'campaign_id'
       transform:
         ads_sessions_join:
+          enabled: false
           materialized: table
           sort: ['session_id', 'ad_id']
           dist: 'session_id'
