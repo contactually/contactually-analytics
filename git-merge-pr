@@ -1,0 +1,65 @@
+#!/bin/sh
+
+BRANCH=$1
+test -z $BRANCH && echo "Error: branch required." 1>&2 && exit 1
+
+# Get the name of the current branch that we're merging
+# the other branch into.
+TARGET_BRANCH=`git symbolic-ref HEAD --short`
+test $TARGET_BRANCH = $BRANCH && echo "Error: run this command from the target branch (likely develop)." 1>&2 && exit 1
+
+read -p "You're going to merge ${BRANCH} into ${TARGET_BRANCH}. Are you sure? [n/y] " -n 1 -r
+echo    # (optional) move to a new line
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+    exit 1
+fi
+
+# First we move to the branch to be merged and rebase off of the
+# target branch. Exit if there was an error with either one.
+echo "Ensure ${BRANCH} and ${TARGET_BRANCH} are up-to-date" &&
+  # Pull from the target branch
+  git pull origin $TARGET_BRANCH &&
+
+  # Checkout the branch to be merged, pull the most recent from origin, and
+  # rebase onto the target branch
+  git checkout $BRANCH &&
+  git pull origin $BRANCH &&
+  git rebase $TARGET_BRANCH &&
+
+  # Update origin with the latest
+  git push --force origin $BRANCH ||
+  exit 1
+
+# There's a race condition with force-pushing the rebased feature branch and
+# pushing the merge commit. If the merge commit arrives before the rebased
+# feature branch, it marks the PR as 'closed' instead of 'merged'.
+echo "Sleeping for 5 seconds to avoid race condition..."
+sleep 5
+
+# Base title for the pull request
+msg="Merge branch '${BRANCH}' into ${TARGET_BRANCH}\n\n"
+
+# Grab any jira issue IDs from any commits in this branch
+# and append them with the transition (e.g. ENG-1234 #review)
+msg+=`git log ${TARGET_BRANCH}..${BRANCH} | \
+      grep -E -o 'ENG-[0-9]+' | \
+      sort | \
+      uniq | \
+      sed -e "s/$/ #review #resolve/g"`
+
+# The newline characters above aren't actually newlines, just
+# the two characters "\n". We use printf here to interpret them
+# as actual newlines
+msg=`printf "${msg}"`
+
+echo "Merging ${BRANCH} into ${TARGET_BRANCH}:" &&
+  # Merge the branch into the target branch with the compiled commit message
+  # and push to origin.
+  git checkout $TARGET_BRANCH &&
+  git merge --no-ff $BRANCH -m "${msg}" &&
+  git push origin $TARGET_BRANCH &&
+
+  # Delete the feature branch locally and on origin
+  git branch --delete $BRANCH &&
+  git push origin --delete $BRANCH

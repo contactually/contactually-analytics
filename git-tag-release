@@ -1,0 +1,34 @@
+#!/bin/sh
+
+CURRENT_BRANCH=`git symbolic-ref HEAD --short`
+CURRENT_TAG=$(echo $CURRENT_BRANCH | cut -d '/' -f 2)
+
+# If the "cut" doesn't actually split anything, it returns the given string
+test $CURRENT_BRANCH = $CURRENT_TAG && echo "Error: could not infer version." 1>&2 && exit 1
+
+DEPLOYER=`git config user.email`
+CURRENT_TIME=`date +%Y-%m-%dT%H:%M:%S%z`
+
+# These are all run in sequence using '&&' at the end of each line. Broken
+# out into separate lines and chunks to make it easier to read.
+
+echo "Tagging release:" &&
+  # Create and push tag
+  git tag --force --annotate $CURRENT_TAG -m "Deployed by ${DEPLOYER} at ${CURRENT_TIME}" &&
+  git push origin --tags &&
+
+  # Reset master to tag
+  git checkout master &&
+  git reset --hard $CURRENT_TAG &&
+  git push --force origin master &&
+
+  # Merge release into develop
+  git checkout develop &&
+  git pull &&
+  git merge $CURRENT_BRANCH &&
+  git push &&
+
+  # Destroy release branch
+  git branch -d $CURRENT_BRANCH &&
+  git push origin --delete $CURRENT_BRANCH
+
