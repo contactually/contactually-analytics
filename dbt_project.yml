@@ -15,22 +15,22 @@ models:
   Contactually:
     ads:
       base:
-        ads_base:
-          enabled: false
-          materialized: table
+        adwords_ads_base:
+          enabled: true
+          materialized: ephemeral
           sort: ['date']
-          dist: 'campaign_id'
-        ads_base_with_mappings:
-          enabled: false
-          materialized: table
+          dist: 'campaign_name'
+        facebook_ads_base:
+          enabled: true
+          materialized: ephemeral
           sort: ['date']
-          dist: 'campaign_id'
+          dist: 'campaign_name'
       transform:
-        ads_sessions_join:
-          enabled: false
+        ad_campaign_stats:
+          enabled: true
           materialized: table
-          sort: ['session_id', 'ad_id']
-          dist: 'session_id'
+          sort: ['date']
+          dist: 'campaign_name'
 
     snowplow:
       base:
