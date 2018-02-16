@@ -71,6 +71,7 @@ select sue.id,
   json_extract_path_text( extra_data, 'reminder') as reminder,
   json_extract_path_text( extra_data, 'response') as response,
   json_extract_path_text( extra_data, 'quantity_rejected') as quantity_rejected,
+  json_extract_path_text( extra_data, 'quantity_accepted') as quantity_accepted,
   json_extract_path_text( extra_data, 'contact_program_id') as contact_program_id,
   json_extract_path_text( extra_data, 'contacts_count') as contacts_count
 from postgres_public_production_main_public.stats_user_events as sue
