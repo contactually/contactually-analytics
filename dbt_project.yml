@@ -66,9 +66,14 @@ models:
 
     finance:
       tables:
-        materialized: table
-        sort: txn_date
-        dist: txn_date
+        finance_cogs:
+          materialized: table
+          sort: txn_date
+          dist: txn_date
+        finance_marketing_costs:
+          materialized: table
+          sort: txn_date
+          dist: txn_date
 
     postgres:
       base:
