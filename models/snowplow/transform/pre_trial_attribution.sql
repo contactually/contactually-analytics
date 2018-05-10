@@ -1,4 +1,4 @@
-with user_session_events as (
+with snowplow_base_with_session_index as (
   select * from {{ ref('snowplow_base_with_session_index') }}
 ),
 pre_trial_session_indexes as (
@@ -9,7 +9,7 @@ pre_trial_session_indexes as (
     max(events.domain_sessionidx) as max_session_index,
     min(events.domain_sessionidx) as min_session_index
   from
-    user_session_events events
+    snowplow_base_with_session_index events
   where events.pre_trial_session_flag = 1
   group by 1
 ),
@@ -29,13 +29,13 @@ pre_trial_session_totals as (
        sum( events.event_duration_in_s ) as session_duration_in_s,
        sum( case when events.event = 'pv' then 1 else 0 end ) as page_view_count
      from
-       user_session_events events
+       snowplow_base_with_session_index events
      where events.pre_trial_session_flag = 1
      group by 1,2
    )page_views
   group by 1
 )
-select distinct
+select
   base.blended_user_id,
   base.website_version_seen,
   totals.session_count,
@@ -56,6 +56,7 @@ select distinct
   first_touch.mkt_campaign as first_touch_in_campaign,
   first_touch.referer_url as first_touch_in_referer,
   first_touch.page_url as first_touch_landing_page,
+  first_touch.app_id,
   /********LAST TOUCH********/
   last_touch.collector_tstamp as last_touch_date,
   case when last_touch.mkt_medium is not null
@@ -78,21 +79,21 @@ select distinct
 from (
   select distinct blended_user_id,
     website_version_seen
-  from user_session_events
+  from snowplow_base_with_session_index
 )base
 inner join pre_trial_session_indexes indexes
   on base.blended_user_id = indexes.blended_user_id
-inner join user_session_events first_touch
+inner join snowplow_base_with_session_index first_touch
   on indexes.blended_user_id = first_touch.blended_user_id
   and first_touch.domain_sessionidx = indexes.min_session_index
   and first_touch.session_event_index = 1
   and first_touch.pre_trial_session_flag = 1
-left join user_session_events last_touch
+left join snowplow_base_with_session_index last_touch
   on indexes.blended_user_id = last_touch.blended_user_id
   and last_touch.domain_sessionidx = indexes.max_session_index
   and last_touch.session_event_index = 1
   and last_touch.pre_trial_session_flag = 1
-left join user_session_events middle_touch
+left join snowplow_base_with_session_index middle_touch
   on indexes.blended_user_id = middle_touch.blended_user_id
   and middle_touch.domain_sessionidx > indexes.min_session_index
   and middle_touch.domain_sessionidx < indexes.max_session_index
@@ -100,4 +101,4 @@ left join user_session_events middle_touch
   and middle_touch.pre_trial_session_flag = 1
 inner join pre_trial_session_totals totals
   on totals.blended_user_id = indexes.blended_user_id
-group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19
+group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
