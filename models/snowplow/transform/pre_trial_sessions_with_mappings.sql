@@ -16,6 +16,7 @@ snowplow_sessions_with_key as (
     pre_trial_attribution.time_on_site_in_s,
     pre_trial_attribution.page_view_count,
     pre_trial_attribution.app_id,
+    pre_trial_attribution.user_ipaddress,
     pre_trial_attribution.first_touch_date,
     pre_trial_attribution.first_touch_in_medium,
     pre_trial_attribution.first_touch_in_source,
