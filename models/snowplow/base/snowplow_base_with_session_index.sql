@@ -1,10 +1,26 @@
 with website_version as
 (
-  select
-    base.blended_user_id,
-    max(base.website_version_seen) as website_version_seen
-  from analytics.snowplow_base_events base
-  group by 1
+select
+  base.blended_user_id,
+  max(base.website_version_seen) as website_version_seen
+from analytics.snowplow_base_events base
+group by 1
+), calculated_session_idx as
+(
+select
+  sessions.blended_user_id,
+  sessions.domain_sessionid,
+  sessions.session_start,
+  row_number() over (partition by blended_user_id order by session_start) as session_index
+from
+  (
+    select distinct
+      blended_user_id,
+      domain_sessionid,
+      session_start
+    from
+      analytics.snowplow_base_events
+  )sessions
 )
 select
   sp_base_events.domain_userid,
@@ -50,25 +66,10 @@ select
   sp_base_events.mkt_source,
   sp_base_events.mkt_term,
   sp_base_events.app_id,
+  sp_base_events.user_ipaddress,
   website_version.website_version_seen
 from analytics.snowplow_base_events sp_base_events
-inner join
-  (
-    select
-      sessions.blended_user_id,
-      sessions.domain_sessionid,
-      sessions.session_start,
-      row_number() over (partition by blended_user_id order by session_start) as session_index
-    from
-      (
-        select distinct
-          blended_user_id,
-          domain_sessionid,
-          session_start
-        from
-          analytics.snowplow_base_events
-      )sessions
-  )calculated_session_idx
+inner join calculated_session_idx
   on sp_base_events.blended_user_id = calculated_session_idx.blended_user_id
   and sp_base_events.domain_sessionid = calculated_session_idx.domain_sessionid
 left join website_version

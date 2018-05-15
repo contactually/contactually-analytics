@@ -44,8 +44,6 @@ models:
           dist: 'blended_user_id'
         snowplow_base_with_session_index:
           materialized: ephemeral
-        user_session_events:
-          enabled: false
       transform:
         pre_customer_attribution:
           materialized: table

@@ -57,6 +57,7 @@ select
   first_touch.referer_url as first_touch_in_referer,
   first_touch.page_url as first_touch_landing_page,
   first_touch.app_id,
+  first_touch.user_ipaddress,
   /********LAST TOUCH********/
   last_touch.collector_tstamp as last_touch_date,
   case when last_touch.mkt_medium is not null
