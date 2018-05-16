@@ -52,6 +52,7 @@ select distinct
   sp_sessions.time_on_site_in_s,
   sp_sessions.page_view_count,
   sp_sessions.app_id,
+  sp_sessions.user_ipaddress,
   sp_sessions.first_touch_in_source,
   sp_sessions.first_touch_in_medium,
   sp_sessions.first_touch_in_campaign,
