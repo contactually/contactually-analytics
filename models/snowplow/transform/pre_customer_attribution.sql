@@ -102,4 +102,4 @@ left join snowplow_base_with_session_index middle_touch
   and middle_touch.pre_customer_session_flag = 1
 inner join pre_customer_session_totals totals
   on totals.blended_user_id = indexes.blended_user_id
-group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
+group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21
