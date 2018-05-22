@@ -1,10 +1,10 @@
 select
   id,
-  total_amt as totalamt,
+  total_amount as totalamt,
   transaction_date as txndate,
-  vendor as vendorref__value,
-  credit_card as creditcardpayment__ccaccountref__value,
-  bank_account as checkpayment__bankaccountref__value,
+  vendor_id as vendorref__value,
+  credit_card_account_id as creditcardpayment__ccaccountref__value,
+  check_bank_account_id as checkpayment__bankaccountref__value,
   null as metadata__createtime,
   null as metadata__lastupdatedtime
 from quickbooks.bill_payment

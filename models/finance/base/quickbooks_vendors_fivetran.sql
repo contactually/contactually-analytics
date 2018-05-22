@@ -4,5 +4,5 @@ select
   balance,
   null as metadata__createtime,
   null as metadata__lastupdatedtime
-from quickbooks.vendor
+  from quickbooks.vendor
 where not deleted

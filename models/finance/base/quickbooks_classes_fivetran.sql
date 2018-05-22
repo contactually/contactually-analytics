@@ -3,7 +3,7 @@ select
   name,
   fully_qualified_name as fullyqualifiedname,
   active,
-  parent as parentref__value,
+  parent_class_id as parentref__value,
   sub_class as subclass,
   null as sparse,
   null as domain,
