@@ -1,5 +1,4 @@
 select
-  deposit_id as source_key,
-  line_number as level_id,
-  txn_line_id as txnid
-from quickbooks.deposit_line_txn
+  null as source_key,
+  null as level_id,
+  null as txnid

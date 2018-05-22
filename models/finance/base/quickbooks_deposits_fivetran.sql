@@ -1,8 +1,8 @@
 select
   id,
   total_amount as totalamt,
-  txn_date as txndate,
-  account as deposittoaccountref__value,
+  transaction_date as txndate,
+  account_id as deposittoaccountref__value,
   null as metadata__createtime,
   null as metadata__lastupdatedtime
 from quickbooks.deposit
