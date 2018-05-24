@@ -9,8 +9,7 @@ select distinct
   max(lower(map.out_medium)) as out_medium,
   max(lower(map.out_campaign)) as out_campaign,
   max(lower(map.out_referring_domain)) as out_referring_domain,
-  max(lower(map.out_intent)) as out_intent,
-  max(lower(map.out_intent_macro)) as out_intent_macro,
+  max(lower(map.out_category)) as out_intent_category,
   max(lower(map.clean_landing_page)) as clean_landing_page
 from fivetran_uploads.snowplow_mapping map
 group by 1
