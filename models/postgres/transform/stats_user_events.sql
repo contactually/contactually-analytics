@@ -81,4 +81,5 @@ from postgres_public_production_main_public.stats_user_events as sue
     on u.id = sue.user_id
 {% if adapter.already_exists(this.schema, this.table) and not flags.FULL_REFRESH %}
   where sue.id not in (select id from {{ this }})
+    and (not sue._fivetran_deleted or sue._fivetran_deleted is null)
 {% endif %}
