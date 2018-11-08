@@ -73,18 +73,18 @@ models:
           sort: txn_date
           dist: txn_date
 
-    postgres:
-      base:
-        users_created:
-          materialized: ephemeral
-          sort: ['id']
-          dist: 'id'
-      transform:
-        stats_user_events:
-          materialized: incremental
-          sort: ['created_at', 'event_type']
-          dist: 'user_id'
-          sql_where: 'TRUE'
+    # postgres:
+    #   base:
+    #     users_created:
+    #       materialized: ephemeral
+    #       sort: ['id']
+    #       dist: 'id'
+    #   transform:
+    #     stats_user_events:
+    #       materialized: incremental
+    #       sort: ['created_at', 'event_type']
+    #       dist: 'user_id'
+    #       sql_where: 'TRUE'
 
   quickbooks:
     post-hook: "grant select on table {{this}} to looker"
