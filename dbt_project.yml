@@ -32,35 +32,35 @@ models:
           sort: ['date']
           dist: 'campaign_name'
 
-    snowplow:
-      base:
-        smc_mapping:
-          materialized: table
-          sort: ['smc_key']
-          dist: 'in_campaign'
-        snowplow_base_events:
-          materialized: table
-          sort: ['blended_user_id','session_start']
-          dist: 'blended_user_id'
-        snowplow_base_with_session_index:
-          materialized: ephemeral
-      transform:
-        pre_customer_attribution:
-          materialized: table
-          sort: ['blended_user_id', 'first_touch_date']
-          dist: 'blended_user_id'
-        pre_trial_attribution:
-          materialized: table
-          sort: ['blended_user_id', 'first_touch_date']
-          dist: 'blended_user_id'
-        pre_customer_sessions_with_mappings:
-          materialized: table
-          sort: ['blended_user_id', 'first_touch_date']
-          dist: 'blended_user_id'
-        pre_trial_sessions_with_mappings:
-          materialized: table
-          sort: ['blended_user_id', 'first_touch_date']
-          dist: 'blended_user_id'
+    # snowplow:
+    #   base:
+    #     smc_mapping:
+    #       materialized: table
+    #       sort: ['smc_key']
+    #       dist: 'in_campaign'
+    #     snowplow_base_events:
+    #       materialized: table
+    #       sort: ['blended_user_id','session_start']
+    #       dist: 'blended_user_id'
+    #     snowplow_base_with_session_index:
+    #       materialized: ephemeral
+    #   transform:
+    #     pre_customer_attribution:
+    #       materialized: table
+    #       sort: ['blended_user_id', 'first_touch_date']
+    #       dist: 'blended_user_id'
+    #     pre_trial_attribution:
+    #       materialized: table
+    #       sort: ['blended_user_id', 'first_touch_date']
+    #       dist: 'blended_user_id'
+    #     pre_customer_sessions_with_mappings:
+    #       materialized: table
+    #       sort: ['blended_user_id', 'first_touch_date']
+    #       dist: 'blended_user_id'
+    #     pre_trial_sessions_with_mappings:
+    #       materialized: table
+    #       sort: ['blended_user_id', 'first_touch_date']
+    #       dist: 'blended_user_id'
 
     finance:
       tables:
