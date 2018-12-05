@@ -13,24 +13,24 @@ data-paths: ["data"]
 models:
   post-hook: "grant select on table {{this}} to looker"
   Contactually:
-    ads:
-      base:
-        adwords_ads_base:
-          enabled: true
-          materialized: ephemeral
-          sort: ['date']
-          dist: 'campaign_name'
-        facebook_ads_base:
-          enabled: true
-          materialized: ephemeral
-          sort: ['date']
-          dist: 'campaign_name'
-      transform:
-        ad_campaign_stats:
-          enabled: true
-          materialized: table
-          sort: ['date']
-          dist: 'campaign_name'
+    # ads:
+    #   base:
+    #     adwords_ads_base:
+    #       enabled: true
+    #       materialized: ephemeral
+    #       sort: ['date']
+    #       dist: 'campaign_name'
+    #     facebook_ads_base:
+    #       enabled: true
+    #       materialized: ephemeral
+    #       sort: ['date']
+    #       dist: 'campaign_name'
+    #   transform:
+    #     ad_campaign_stats:
+    #       enabled: true
+    #       materialized: table
+    #       sort: ['date']
+    #       dist: 'campaign_name'
 
     # snowplow:
     #   base:
