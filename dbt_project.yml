@@ -1,7 +1,7 @@
 #settings specifically for this models directory
 #config other dbt settings within ~/.dbt/profiles.yml
 name: 'Contactually'
-version: '0.0.0.1'
+version: '0.0.1'
 
 source-paths: ["models"]
 target-path: "target"
@@ -65,5 +65,5 @@ models:
 
 profile: "contactually"
 
-repositories:
-  - "https://github.com/fishtown-analytics/quickbooks.git@v0.1.0"
+# repositories:
+#  - "https://github.com/fishtown-analytics/quickbooks.git@v0.1.0"
