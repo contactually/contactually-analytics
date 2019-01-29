@@ -7,7 +7,7 @@ with bill_payments as (
 
 ), billpayment_lines as (
 
-  select * from {{ref('quickbooks_billpayment_lines')}}
+  select * from {{ref('quickbooks_bill_payments_line')}}
 
 ), d1 as (
 

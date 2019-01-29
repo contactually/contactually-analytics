@@ -4,7 +4,7 @@ with entries as (
 
 ), lines as (
 
-  select * from {{ref('quickbooks_journal_lines')}}
+  select * from {{ref('quickbooks_journal_entry_lines')}}
 
 )
 
