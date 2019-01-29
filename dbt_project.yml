@@ -13,55 +13,6 @@ data-paths: ["data"]
 models:
   post-hook: "grant select on table {{this}} to looker"
   Contactually:
-    # ads:
-    #   base:
-    #     adwords_ads_base:
-    #       enabled: true
-    #       materialized: ephemeral
-    #       sort: ['date']
-    #       dist: 'campaign_name'
-    #     facebook_ads_base:
-    #       enabled: true
-    #       materialized: ephemeral
-    #       sort: ['date']
-    #       dist: 'campaign_name'
-    #   transform:
-    #     ad_campaign_stats:
-    #       enabled: true
-    #       materialized: table
-    #       sort: ['date']
-    #       dist: 'campaign_name'
-
-    # snowplow:
-    #   base:
-    #     smc_mapping:
-    #       materialized: table
-    #       sort: ['smc_key']
-    #       dist: 'in_campaign'
-    #     snowplow_base_events:
-    #       materialized: table
-    #       sort: ['blended_user_id','session_start']
-    #       dist: 'blended_user_id'
-    #     snowplow_base_with_session_index:
-    #       materialized: ephemeral
-    #   transform:
-    #     pre_customer_attribution:
-    #       materialized: table
-    #       sort: ['blended_user_id', 'first_touch_date']
-    #       dist: 'blended_user_id'
-    #     pre_trial_attribution:
-    #       materialized: table
-    #       sort: ['blended_user_id', 'first_touch_date']
-    #       dist: 'blended_user_id'
-    #     pre_customer_sessions_with_mappings:
-    #       materialized: table
-    #       sort: ['blended_user_id', 'first_touch_date']
-    #       dist: 'blended_user_id'
-    #     pre_trial_sessions_with_mappings:
-    #       materialized: table
-    #       sort: ['blended_user_id', 'first_touch_date']
-    #       dist: 'blended_user_id'
-
     finance:
       tables:
         finance_cogs:
@@ -72,19 +23,6 @@ models:
           materialized: table
           sort: txn_date
           dist: txn_date
-
-    # postgres:
-    #   base:
-    #     users_created:
-    #       materialized: ephemeral
-    #       sort: ['id']
-    #       dist: 'id'
-    #   transform:
-    #     stats_user_events:
-    #       materialized: incremental
-    #       sort: ['created_at', 'event_type']
-    #       dist: 'user_id'
-    #       sql_where: 'TRUE'
 
   quickbooks:
     post-hook: "grant select on table {{this}} to looker"
